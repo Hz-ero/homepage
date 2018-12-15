@@ -1,0 +1,21 @@
+{
+  "name": "homepage",
+  "version": "1.0.0",
+  "description": "koa--react--webpack",
+  "main": "index.js",
+  "scripts": {
+    "server": "node server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "koa",
+    "react",
+    "webpack"
+  ],
+  "author": "lijiaqiang@outlook.com",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.6.2",
+    "koa-static": "^5.0.0"
+  }
+}
