@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const path = require('path')
 
 module.exports = {
@@ -41,6 +42,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin({
       // Options...
-    })    
+    }),
+    new OpenBrowserPlugin({ url: 'http://localhost:9000' })
   ]
 }
