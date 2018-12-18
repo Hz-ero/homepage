@@ -1,0 +1,7 @@
+const ADD_SITE = 'ADD_SITE'
+const DELETE_SITE = 'DELETE_SITE'
+
+export {
+  ADD_SITE,
+  DELETE_SITE
+}

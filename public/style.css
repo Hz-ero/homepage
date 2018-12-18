@@ -1,0 +1,45 @@
+* { padding: 0; margin: 0; }
+
+html, body { height: 100%; }
+#fullBox {
+  height: 100%; width: 100%;
+
+  background-position: 50%;
+  background-color: #353535;
+  /* background-image: url(./images/backImg.jpg); */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#wholeSitesBox {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.column {
+  display: flex;
+}
+.siteBox {
+  padding: 30px;
+  /* background-color: antiquewhite; */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.siteIcon {
+  height: 100px;
+  width: 100px;
+  border-radius: 8px;
+  background-color: blue;
+  /* background-image: url(./images/hupu.png); */
+}
+.siteName {
+  margin-top: 8px;
+  font-size: 15px;
+  height: 19px;
+  line-height: 19px;
+}
