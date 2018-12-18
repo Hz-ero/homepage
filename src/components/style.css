@@ -3,3 +3,11 @@
   display: flex;
   flex-direction: column;
 }
+
+.show {
+  visibility: visible;
+}
+
+.close {
+  visibility: hidden;
+}

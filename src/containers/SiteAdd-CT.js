@@ -1,14 +1,21 @@
 import { connect } from "react-redux"
 import SiteAdd_CP from "../components/SiteAdd-CP.jsx"
-import { addSite } from "../actions"
+import { addSite, closeSiteAddForm } from "../actions"
 
-const mapStateToProps = (state, ownProps) => ({
-  // todoArray: state.todos
-})
+const mapStateToProps = (state, ownProps) => {
+  
+  const immu_state = state.toObject()
+  return {
+    signal: immu_state.signal
+  }
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   clickAddSite: (siteInfo) => {
     dispatch(addSite(siteInfo))
+  },
+  wantCloseSiteAddForm: () => {
+    dispatch(closeSiteAddForm())
   }
 })
 

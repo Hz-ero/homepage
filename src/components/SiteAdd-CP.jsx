@@ -3,7 +3,7 @@ import Style from './style.css'
 
 const SiteAdd = (props) => {
   let siteAdrInput, siteNameInput
-  const { clickAddSite } = props
+  const { signal, clickAddSite, wantCloseSiteAddForm } = props
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -17,15 +17,23 @@ const SiteAdd = (props) => {
     siteNameInput = ''
   }
 
+  const handleCloseForm = (e) => {
+    e.preventDefault()
+
+    wantCloseSiteAddForm()
+    siteAdrInput = ''
+    siteNameInput = ''
+  }
+
   return (
-    <div>
+    <div className={signal?Style.show:Style.close} >
       <form className={Style.box} onSubmit={handleSubmit} >
         <input type="text" 
         ref={input => siteAdrInput = input} />
         <input type="text" 
         ref={input => siteNameInput = input} />
         <input type="submit" value="添加"/>
-        <button>取消</button>
+        <button onClick={handleCloseForm} >取消</button>
       </form>
     </div>
   )
