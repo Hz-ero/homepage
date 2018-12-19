@@ -11,3 +11,7 @@
 .close {
   visibility: hidden;
 }
+
+.testButton {
+  width: 80px;
+}

@@ -1,5 +1,6 @@
 import React from 'react'
 import Style from './style.css'
+import { InputLabel, Drawer, Button, FormControl } from "@material-ui/core";
 
 const SiteAdd = (props) => {
   let siteAdrInput, siteNameInput
@@ -13,28 +14,25 @@ const SiteAdd = (props) => {
       siteName: siteNameInput.value
     }
     clickAddSite(siteInfo)
-    siteAdrInput = ''
-    siteNameInput = ''
+    handleCloseForm()
   }
 
-  const handleCloseForm = (e) => {
-    e.preventDefault()
+  const handleCloseForm = () => {
 
     wantCloseSiteAddForm()
-    siteAdrInput = ''
-    siteNameInput = ''
+    siteAdrInput.value = ''
+    siteNameInput.value = ''
   }
 
   return (
-    <div className={signal?Style.show:Style.close} >
-      <form className={Style.box} onSubmit={handleSubmit} >
-        <input type="text" 
-        ref={input => siteAdrInput = input} />
-        <input type="text" 
-        ref={input => siteNameInput = input} />
-        <input type="submit" value="添加"/>
-        <button onClick={handleCloseForm} >取消</button>
-      </form>
+    <div >
+      <Drawer anchor="right" open={signal} onClose={handleCloseForm} variant="temporary">
+        <input id="site-adr" ref={input => siteAdrInput = input} />
+        <input id="site-name" ref={input => siteNameInput = input}/>
+        <Button variant="contained" color="primary"
+        onClick={handleSubmit}
+        >确认</Button>
+      </Drawer>
     </div>
   )
 }
