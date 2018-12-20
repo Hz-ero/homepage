@@ -5,8 +5,10 @@ import { showRightDrawer } from "../actions"
 const mapStateToProps = (state, ownProps) => {
   
   const immu_state = state.toObject()
-  return {
-    signal: immu_state.signal
+  if (!immu_state.sites.size) {
+    return { siteArray: [] }
+  } else {
+    return { siteArray: immu_state.sites.toJS() }
   }
 }
 

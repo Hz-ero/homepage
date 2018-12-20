@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add'
 
 
 const AddButton = (props) => {
-  const {signal, wantShowRightDrawer} = props
+  const {siteArray, wantShowRightDrawer} = props
   
   const handleShowSidePanel = (e) => {
     e.preventDefault()
@@ -14,10 +14,12 @@ const AddButton = (props) => {
 
   return (
     <div className={Style.addButton}>
-      <Fab size="medium" color="secondary" aria-label="Add" 
-          onClick={handleShowSidePanel}>
-        <AddIcon />
-      </Fab>
+      <div className={siteArray.length<16 ? Style.show : Style.hidden}>
+        <Fab size="medium" color="secondary" aria-label="Add" 
+            onClick={handleShowSidePanel}>
+          <AddIcon />
+        </Fab>
+      </div>
     </div>
   )
 }
