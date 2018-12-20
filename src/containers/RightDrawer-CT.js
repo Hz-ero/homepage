@@ -1,6 +1,6 @@
 import { connect } from "react-redux"
-import SiteAdd_CP from "../components/SiteAdd-CP.jsx"
-import { addSite, closeSiteAddForm } from "../actions"
+import RightDrawer_CP from "../components/RightDrawer-CP.jsx"
+import { addSite, closeRightDrawer } from "../actions"
 
 const mapStateToProps = (state, ownProps) => {
   
@@ -14,14 +14,14 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   clickAddSite: (siteInfo) => {
     dispatch(addSite(siteInfo))
   },
-  wantCloseSiteAddForm: () => {
-    dispatch(closeSiteAddForm())
+  wantCloseRightDrawer: () => {
+    dispatch(closeRightDrawer())
   }
 })
 
-const SiteAdd_CT = connect(
+const RightDrawer_CT = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SiteAdd_CP)
+)(RightDrawer_CP)
 
-export default SiteAdd_CT
+export default RightDrawer_CT

@@ -1,10 +1,10 @@
 import React from 'react'
 import Style from './style.css'
-import { InputLabel, Drawer, Button, FormControl } from "@material-ui/core";
+import { Drawer, Button } from "@material-ui/core";
 
-const SiteAdd = (props) => {
+const RightDrawer = (props) => {
   let siteAdrInput, siteNameInput
-  const { signal, clickAddSite, wantCloseSiteAddForm } = props
+  const { signal, clickAddSite, wantCloseRightDrawer } = props
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -19,7 +19,7 @@ const SiteAdd = (props) => {
 
   const handleCloseForm = () => {
 
-    wantCloseSiteAddForm()
+    wantCloseRightDrawer()
     siteAdrInput.value = ''
     siteNameInput.value = ''
   }
@@ -37,4 +37,4 @@ const SiteAdd = (props) => {
   )
 }
 
-export default SiteAdd
+export default RightDrawer

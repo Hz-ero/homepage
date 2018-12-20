@@ -1,5 +1,5 @@
 import { createReducer } from 'redux-action-tools'
-import { SHOW_SITE_FORM, CLOSE_SITE_FORM } from "../actions/actionTypes.js";
+import { SHOW_RIGHT_DRAWER, CLOSE_RIGHT_DRAWER } from "../actions/actionTypes.js";
 
 const setSignalToTrue = (state, action) => {
 
@@ -12,8 +12,8 @@ const setSignalToFalse = (state, action) => {
 }
 
 const signal = createReducer()
-  .when(SHOW_SITE_FORM, setSignalToTrue)
-  .when(CLOSE_SITE_FORM, setSignalToFalse)
+  .when(SHOW_RIGHT_DRAWER, setSignalToTrue)
+  .when(CLOSE_RIGHT_DRAWER, setSignalToFalse)
   .build(false)
 
 export default signal

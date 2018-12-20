@@ -1,42 +1,26 @@
 import React from 'react'
 import Style from './style.css'
-import { ClickAwayListener, Card, Button} from '@material-ui/core'
 
 const SiteItem = (props) => {
   const { siteInfo } = props
   
   return (
-    <div>
-      <div className="name"></div>
-      <div className="name">{siteInfo.siteName}</div>
+    <div className={Style.siteBox}>
+      <div className={Style.siteIcon}></div>
+      <div className={Style.siteName}>{siteInfo.siteName}</div>
     </div>
   )
 }
 
 const SitePanel = (props) => {
-  const { siteArray, wantShowSiteAddForm, wantCloseSiteAddForm } = props
-
-  const handleNewSite = (e) => {
-    e.preventDefault()
-    wantShowSiteAddForm()
-  }
-
-  const handleCloseForm = () => {
-    wantCloseSiteAddForm()
-  }
+  const { siteArray } = props  
 
   return (
-    <div>
+    <div className={Style.sitesPanel}>
       {
         siteArray.map(item => (
           <SiteItem key={item.id} index={item.id} siteInfo={item.siteInfo} />
         ))
-      }
-      {
-        siteArray.length<6 ? (
-          <Button className={Style.testButton} variant="contained" color="primary"
-            onClick={handleNewSite}>新增</Button>
-        ) : null
       }
     </div>
   )
