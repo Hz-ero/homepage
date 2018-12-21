@@ -15,7 +15,7 @@
 }
 
 .siteBox {
-  margin: 20px;
+  margin: 16px;
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -32,10 +32,19 @@
 .addButton {
   position: fixed;
   top: 40px; right: 40px;
+  z-index: 110;
+}
+
+.sideDrawer {
+  position: absolute;
+  top: 0; right: 0;
+  height: 100%; width: 320px;
+  z-index: 120;
+  background-color: aquamarine;
 }
 
 .siteIcon {
-  height: 100px; width: 100px;
+  height: 96px; width: 96px;
   border-radius: 6px;
   background-color: blue;
 }
@@ -49,4 +58,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.siteForm {
+  /* display: flex;
+  flex-direction: row; */
+}
+
+.inputBox {
+  width: 300px;
+}
+
+.inputField {
+  height: 32px; width: 100%;
+  padding: 8px; margin: 8px;
+  padding-right: 32px;
+  font-size: 15px;
+}
+
+.testButton {
+  width: 170px;
+}
+
+.fullScreen {
+  position: fixed;
+  height: 100%; width: 100%;
+  background-color: blueviolet;
+  display: flex;
+  flex-direction: row-reverse;
 }
