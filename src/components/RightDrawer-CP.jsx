@@ -1,5 +1,6 @@
 import React from "react";
 import Style from "./style.css";
+var _string = require("lodash/string");
 import {
   Slide,
   Button,
@@ -7,115 +8,162 @@ import {
   AppBar,
   Typography,
   Toolbar,
-  Collapse
+  Collapse,
+  TextField,
+  OutlinedInput
 } from "@material-ui/core";
 
-const RightDrawer = props => {
-  let collapseON = false;
-  let siteAdrInput, siteNameInput;
-  const { signal, clickAddSite, wantCloseRightDrawer } = props;
+const adrToName = adr => {
+  let result = adr;
+  if (adr === "") {
+    return false;
+  }
+  result = _string.replace(result, "http://", "");
+  result = _string.replace(result, "https://", "");
+  result = _string.replace(result, "www.", "");
+  result = _string.replace(result, ".com", "");
+  result = _string.replace(result, ".cn", "");
+  return result;
+};
 
-  const handleSubmit = e => {
-    e.preventDefault();
+const SiteInfoInput = props => {
+  const { inputLabel, inputError, currentValue, onInputChange } = props;
 
-    let siteInfo = {
-      siteAdr: siteAdrInput.value,
-      siteName: siteNameInput.value
-    };
-    clickAddSite(siteInfo);
-    handleCloseForm();
+  const handleChange = input => {
+    onInputChange(input.target.value);
   };
-
-  const handleClickAway = () => {
-    wantCloseRightDrawer();
-    collapseON = false;
-    siteAdrInput.value = "";
-    siteNameInput.value = "";
-  };
-
-  const handleShowcustomInput = e => {
-    e.preventDefault();
-    collapseON = true;
-    console.log("show custom:", collapseON);
-  };
-
   return (
     <div>
-      <Slide direction="left" in={signal} mountOnEnter unmountOnExit>
-        <ClickAwayListener onClickAway={handleClickAway}>
-          <div className={Style.sideDrawer}>
-            <AppBar position="static" color="default">
-              <Toolbar>
-                <Typography variant="h6" color="inherit">
-                  添加网址
-                </Typography>
-              </Toolbar>
-            </AppBar>
-
-            <div className={Style.siteForm}>
-              <div className={Style.formSection}>
-                <input
-                  type="text"
-                  className={Style.inputField}
-                  placeholder="输入标题"
-                  ref={input => (siteNameInput = input)}
-                />
-              </div>
-
-              <div className={Style.formSection}>
-                <input
-                  type="text"
-                  className={Style.inputField}
-                  placeholder="输入网址"
-                  ref={input => (siteAdrInput = input)}
-                />
-              </div>
-              <CustomIconInput />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-                className={Style.confirmButton}
-              >
-                确认
-              </Button>
-            </div>
-          </div>
-        </ClickAwayListener>
-      </Slide>
+      <TextField
+        variant="outlined"
+        label={inputLabel}
+        error={inputError}
+        value={currentValue}
+        onChange={handleChange}
+      />
     </div>
   );
 };
 
-class CustomIconInput extends React.Component {
+class RightDrawer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { collapseON: false };
-    // 事件处理函数必须绑定
-    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      siteName: "",
+      siteAdr: "",
+      iconAdr: "",
+      collapseON: false,
+      siteAdrError: false
+    };
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSiteAdrChange = this.handleSiteAdrChange.bind(this);
+    this.handleIconAdrChange = this.handleIconAdrChange.bind(this);
   }
 
-  handleClick(e) {
-    this.setState({
-      collapseON: true
-    });
+  handleNameChange(nameValue) {
+    this.setState({ siteName: nameValue });
+  }
+  handleSiteAdrChange(siteAdrValue) {
+    this.setState({ siteAdr: siteAdrValue });
+    if (siteAdrValue !== "") {
+      this.setState({ siteAdrError: false });
+    }
+  }
+  handleIconAdrChange(iconAdrValue) {
+    this.setState({ iconAdr: iconAdrValue });
+  }
+  handleSubmit(e) {
+    e.preventDefault();
+    if (this.state.siteAdr === "") {
+      this.setState({ siteAdrError: true });
+      return false;
+    }
+
+    if (this.state.siteName === "") {
+      const nameFromAdr = adrToName(this.state.siteAdr);
+      this.setState({ siteName: nameFromAdr });
+    }
+
+    console.log(this.state.siteName);
+  }
+
+  handleClickAway(e) {
+    e.preventDefault();
+    this.props.wantCloseRightDrawer();
+  }
+
+  handleUnCollapse(e) {
+    e.preventDefault();
+    this.setState({ collapseON: true });
   }
 
   render() {
-    // 在实例中通过使用`ref`回调函数来存储text输入框的DOM元素引用(例如:this.textInput)
     return (
-      <div className={Style.formSection}>
-        <div className={Style.siteIconBox}>
-          <div className={Style.siteIcon} />
-          <a className={Style.customButton} onClick={e => this.handleClick(e)}>
-            <span>使用自定义图像</span>
-          </a>
-        </div>
-        <Collapse in={this.state.collapseON}>
-          <div className={Style.webIconInput}>
-            <input className={Style.inputField} />
-          </div>
-        </Collapse>
+      <div>
+        <Slide
+          direction="left"
+          in={this.props.signal}
+          mountOnEnter
+          unmountOnExit
+        >
+          <ClickAwayListener onClickAway={e => this.handleClickAway(e)}>
+            <div className={Style.sideDrawer}>
+              <AppBar position="static" color="default">
+                <Toolbar>
+                  <Typography variant="h6" color="inherit">
+                    添加网址
+                  </Typography>
+                </Toolbar>
+              </AppBar>
+
+              <div className={Style.siteForm}>
+                <div className={Style.formSection}>
+                  <SiteInfoInput
+                    inputLabel="标题"
+                    currentValue={this.state.siteName}
+                    onInputChange={this.handleNameChange}
+                  />
+                </div>
+                <div className={Style.formSection}>
+                  <SiteInfoInput
+                    inputLabel="地址"
+                    inputError={this.state.siteAdrError}
+                    currentValue={this.state.siteAdr}
+                    onInputChange={this.handleSiteAdrChange}
+                  />
+                </div>
+                <div className={Style.formSection}>
+                  <div className={Style.siteIconBox}>
+                    <div className={Style.siteIcon} />
+                    <a
+                      className={Style.customButton}
+                      onClick={e => this.handleUnCollapse(e)}
+                    >
+                      <span>使用自定义图像</span>
+                    </a>
+                  </div>
+                  <Collapse in={this.state.collapseON}>
+                    <div className={Style.webIconInput}>
+                      <SiteInfoInput
+                        inputLabel="图标地址"
+                        currentValue={this.state.iconAdr}
+                        onInputChange={this.handleIconAdrChange}
+                      />
+                    </div>
+                  </Collapse>
+                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={e => this.handleSubmit(e)}
+                  className={Style.confirmButton}
+                >
+                  确认
+                </Button>
+              </div>
+            </div>
+          </ClickAwayListener>
+        </Slide>
       </div>
     );
   }
