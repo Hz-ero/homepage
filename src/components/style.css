@@ -45,6 +45,9 @@
   width: 360px;
   z-index: 120;
   background-color: aquamarine;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .siteIcon {
@@ -66,8 +69,7 @@
 }
 
 .siteForm {
-  width: 320px;
-  margin: 20px;
+  width: 300px;
 }
 
 .inputField {
@@ -115,5 +117,6 @@
 }
 
 .repeatInput {
+  /* height: 40px; */
   width: 100%;
 }

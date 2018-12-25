@@ -1,6 +1,8 @@
 import React from "react";
 import Style from "./style.css";
-var _string = require("lodash/string");
+const _string = require("lodash/string");
+const _object = require("lodash/object");
+const url = require("url");
 import {
   Slide,
   Button,
@@ -9,10 +11,15 @@ import {
   Typography,
   Toolbar,
   Collapse,
-  TextField,
-  OutlinedInput
+  TextField
 } from "@material-ui/core";
 
+/**
+ * 将网站地址转换为网站标题
+ *
+ * @param {string} adr
+ * @returns {string}
+ */
 const adrToName = adr => {
   let result = adr;
   if (adr === "") {
@@ -92,6 +99,7 @@ class RightDrawer extends React.Component {
   }
   handleSubmit(e) {
     e.preventDefault();
+
     if (this.state.siteAdr === "") {
       this.setState({ siteAdrError: true });
       return false;
@@ -102,7 +110,19 @@ class RightDrawer extends React.Component {
       this.setState({ siteName: nameFromAdr });
     }
 
-    console.log(this.state.siteName);
+    if (this.state.iconAdr === "") {
+      try {
+        const inputUrl = new URL(this.state.siteAdr);
+        const hostname = inputUrl.hostname;
+        this.setState({ iconAdr: hostname + "/favicon.ico" });
+      } catch (error) {
+        this.setState({ siteAdrError: true, siteName: "" });
+        return false;
+      }
+    }
+
+    let siteInfo = _object.pick(this.state, ["siteName", "siteAdr", "iconAdr"]);
+    console.log(siteInfo);
   }
 
   handleCancel(e) {
@@ -153,6 +173,7 @@ class RightDrawer extends React.Component {
                     onInputChange={this.handleNameChange}
                   />
                 </div>
+                {/* TODO:添加错误提示 */}
                 <div className={Style.formSection}>
                   <SiteInfoInput
                     inputLabel="地址"
@@ -171,6 +192,7 @@ class RightDrawer extends React.Component {
                       <span>使用自定义图像</span>
                     </a>
                   </div>
+                  {/* TODO:添加错误提示 */}
                   <Collapse in={this.state.collapseON}>
                     <div className={Style.webIconInput}>
                       <SiteInfoInput
