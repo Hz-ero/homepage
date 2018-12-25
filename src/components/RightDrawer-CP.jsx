@@ -35,6 +35,7 @@ const SiteInfoInput = props => {
   return (
     <div>
       <TextField
+        className={Style.repeatInput}
         variant="outlined"
         label={inputLabel}
         error={inputError}
@@ -53,11 +54,23 @@ class RightDrawer extends React.Component {
       siteAdr: "",
       iconAdr: "",
       collapseON: false,
-      siteAdrError: false
+      siteAdrError: false,
+      switchButton: false
     };
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleSiteAdrChange = this.handleSiteAdrChange.bind(this);
     this.handleIconAdrChange = this.handleIconAdrChange.bind(this);
+  }
+
+  setStateInit() {
+    this.setState({
+      siteName: "",
+      siteAdr: "",
+      iconAdr: "",
+      collapseON: false,
+      siteAdrError: false,
+      switchButton: false
+    });
   }
 
   handleNameChange(nameValue) {
@@ -71,6 +84,11 @@ class RightDrawer extends React.Component {
   }
   handleIconAdrChange(iconAdrValue) {
     this.setState({ iconAdr: iconAdrValue });
+    if (iconAdrValue !== "") {
+      this.setState({ switchButton: true });
+    } else {
+      this.setState({ switchButton: false });
+    }
   }
   handleSubmit(e) {
     e.preventDefault();
@@ -87,8 +105,19 @@ class RightDrawer extends React.Component {
     console.log(this.state.siteName);
   }
 
+  handleCancel(e) {
+    e.preventDefault();
+    this.setStateInit();
+  }
+  handlePreview(e) {
+    e.preventDefault();
+    this.setState({ switchButton: false });
+    this.props.wantPreviewIcon(this.state.iconAdr);
+  }
+
   handleClickAway(e) {
     e.preventDefault();
+    this.setStateInit();
     this.props.wantCloseRightDrawer();
   }
 
@@ -134,7 +163,7 @@ class RightDrawer extends React.Component {
                 </div>
                 <div className={Style.formSection}>
                   <div className={Style.siteIconBox}>
-                    <div className={Style.siteIcon} />
+                    <div id="siteIcon" className={Style.siteIcon} />
                     <a
                       className={Style.customButton}
                       onClick={e => this.handleUnCollapse(e)}
@@ -152,14 +181,47 @@ class RightDrawer extends React.Component {
                     </div>
                   </Collapse>
                 </div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={e => this.handleSubmit(e)}
-                  className={Style.confirmButton}
-                >
-                  确认
-                </Button>
+                {/* 按钮 */}
+                <div className={Style.formSection}>
+                  <div className={Style.actionButtons}>
+                    <Button
+                      variant="contained"
+                      color="default"
+                      onClick={e => this.handleCancel(e)}
+                      className={Style.actionButton}
+                    >
+                      取消
+                    </Button>
+                    <div
+                      className={
+                        this.state.switchButton ? Style.hidden : Style.show
+                      }
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={e => this.handleSubmit(e)}
+                        className={Style.actionButton}
+                      >
+                        确认
+                      </Button>
+                    </div>
+                    <div
+                      className={
+                        this.state.switchButton ? Style.show : Style.hidden
+                      }
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={e => this.handlePreview(e)}
+                        className={Style.actionButton}
+                      >
+                        预览
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </ClickAwayListener>
