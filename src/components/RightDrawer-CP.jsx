@@ -123,11 +123,14 @@ class RightDrawer extends React.Component {
 
     let siteInfo = _object.pick(this.state, ["siteName", "siteAdr", "iconAdr"]);
     console.log(siteInfo);
+    this.setStateInit();
+    this.props.wantCloseRightDrawer();
   }
 
   handleCancel(e) {
     e.preventDefault();
     this.setStateInit();
+    this.props.wantCloseRightDrawer();
   }
   handlePreview(e) {
     e.preventDefault();
