@@ -16,14 +16,14 @@ import {
 import { resolve } from "path";
 
 /**
- * 将网站地址转换为网站标题
+ * 将网站域名转换为网站标题
  *
- * @param {string} adr
+ * @param {string} hostname
  * @returns {string}
  */
-const adrToName = adr => {
-  let result = adr;
-  if (adr === "") {
+const hostnameToName = hostname => {
+  let result = hostname;
+  if (hostname === "") {
     return false;
   }
   result = _string.replace(result, "http://", "");
@@ -81,6 +81,13 @@ class RightDrawer extends React.Component {
     });
   }
 
+  /**
+   * 使setState成为同步函数
+   *
+   * @param {object} state
+   * @returns
+   * @memberof RightDrawer
+   */
   setStateAsync(state) {
     return new Promise(resolve => {
       this.setState(state, resolve);
@@ -88,12 +95,8 @@ class RightDrawer extends React.Component {
   }
 
   handleNameChange(nameValue) {
-    let newState = { siteName: nameValue };
-    const runCode = async () => {
-      await this.setStateAsync(newState);
-      console.log(this.state.siteName);
-    };
-    runCode();
+    this.setState({ siteName: nameValue });
+    console.log(this.state.siteName);
   }
   handleSiteAdrChange(siteAdrValue) {
     this.setState({ siteAdr: siteAdrValue });
@@ -109,7 +112,7 @@ class RightDrawer extends React.Component {
       this.setState({ switchButton: false });
     }
   }
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
 
     if (this.state.siteAdr === "") {
@@ -117,24 +120,26 @@ class RightDrawer extends React.Component {
       return false;
     }
 
-    if (this.state.siteName === "") {
-      const nameFromAdr = adrToName(this.state.siteAdr);
-      this.setState({ siteName: nameFromAdr });
-    }
-
     if (this.state.iconAdr === "") {
       try {
         const inputUrl = new URL(this.state.siteAdr);
         const hostname = inputUrl.hostname;
-        this.setState({ iconAdr: hostname + "/favicon.ico" });
+        await this.setStateAsync({ iconAdr: hostname + "/favicon.ico" });
       } catch (error) {
         this.setState({ siteAdrError: true, siteName: "" });
         return false;
       }
     }
 
+    if (this.state.siteName === "") {
+      const inputUrl = new URL(this.state.siteAdr);
+      const hostname = inputUrl.hostname;
+      const nameFromAdr = hostnameToName(hostname);
+      await this.setStateAsync({ siteName: nameFromAdr });
+    }
+
     let siteInfo = _object.pick(this.state, ["siteName", "siteAdr", "iconAdr"]);
-    console.log(siteInfo);
+    this.props.wantAddSite(siteInfo);
     this.setStateInit();
     this.props.wantCloseRightDrawer();
   }
