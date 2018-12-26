@@ -23,4 +23,31 @@ const ff = async () => {
   console.log(smie);
 };
 
-ff();
+const missionOne = () => {
+  setTimeout(() => {
+    console.log("mission 1 done");
+    return Promise.resolve();
+  }, 1000);
+};
+
+const missionTwo = () => {
+  console.log("mission 2 done");
+};
+
+const doMission = async () => {
+  await missionOne();
+  missionTwo();
+};
+
+function timeout(ms) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
+}
+
+async function asyncPrint(value, ms) {
+  await timeout(ms);
+  console.log(value);
+}
+
+asyncPrint("hello world", 1000);

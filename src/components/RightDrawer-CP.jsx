@@ -13,6 +13,7 @@ import {
   Collapse,
   TextField
 } from "@material-ui/core";
+import { resolve } from "path";
 
 /**
  * 将网站地址转换为网站标题
@@ -80,8 +81,19 @@ class RightDrawer extends React.Component {
     });
   }
 
+  setStateAsync(state) {
+    return new Promise(resolve => {
+      this.setState(state, resolve);
+    });
+  }
+
   handleNameChange(nameValue) {
-    this.setState({ siteName: nameValue });
+    let newState = { siteName: nameValue };
+    const runCode = async () => {
+      await this.setStateAsync(newState);
+      console.log(this.state.siteName);
+    };
+    runCode();
   }
   handleSiteAdrChange(siteAdrValue) {
     this.setState({ siteAdr: siteAdrValue });
