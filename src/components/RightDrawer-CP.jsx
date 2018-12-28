@@ -10,10 +10,13 @@ import {
   AppBar,
   Typography,
   Toolbar,
-  Collapse,
-  TextField
+  FormControl,
+  TextField,
+  FormLabel,
+  FormControlLabel,
+  RadioGroup,
+  Radio
 } from "@material-ui/core";
-import { resolve } from "path";
 
 /**
  * 将网站域名转换为网站标题
@@ -34,8 +37,42 @@ const hostnameToName = hostname => {
   return result;
 };
 
+/**
+ * 检测图标地址，返回true/false
+ *
+ * @param {string} path
+ * @returns true/false
+ */
+const checkIconPath = async path => {
+  try {
+    const result = await fetch(path);
+    const data = await result.blob();
+    const dataType = data.type.slice(0, 5);
+
+    if (dataType === "image") {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+};
+
+/**
+ * 组件：可复用输入框
+ *
+ * @param {*} props
+ * @returns
+ */
 const SiteInfoInput = props => {
-  const { inputLabel, inputError, currentValue, onInputChange } = props;
+  const {
+    helperText,
+    inputLabel,
+    inputError,
+    currentValue,
+    onInputChange
+  } = props;
 
   const handleChange = input => {
     onInputChange(input.target.value);
@@ -49,6 +86,7 @@ const SiteInfoInput = props => {
         error={inputError}
         value={currentValue}
         onChange={handleChange}
+        helperText={helperText}
       />
     </div>
   );
@@ -61,8 +99,10 @@ class RightDrawer extends React.Component {
       siteName: "",
       siteAdr: "",
       iconAdr: "",
-      collapseON: false,
+      favicon: "",
+      // collapseON: false,
       siteAdrError: false,
+      iconAdrError: false,
       switchButton: false
     };
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -75,8 +115,10 @@ class RightDrawer extends React.Component {
       siteName: "",
       siteAdr: "",
       iconAdr: "",
-      collapseON: false,
+      favicon: "",
+      // collapseON: false,
       siteAdrError: false,
+      iconAdrError: false,
       switchButton: false
     });
   }
@@ -96,7 +138,6 @@ class RightDrawer extends React.Component {
 
   handleNameChange(nameValue) {
     this.setState({ siteName: nameValue });
-    console.log(this.state.siteName);
   }
   handleSiteAdrChange(siteAdrValue) {
     this.setState({ siteAdr: siteAdrValue });
@@ -120,16 +161,18 @@ class RightDrawer extends React.Component {
       return false;
     }
 
-    if (this.state.iconAdr === "") {
-      try {
-        const inputUrl = new URL(this.state.siteAdr);
-        const hostname = inputUrl.hostname;
-        await this.setStateAsync({ iconAdr: hostname + "/favicon.ico" });
-      } catch (error) {
-        this.setState({ siteAdrError: true, siteName: "" });
-        return false;
-      }
+    try {
+      const inputUrl = new URL(this.state.siteAdr);
+      const hostname = inputUrl.hostname;
+      await this.setStateAsync({ favicon: hostname + "/favicon.ico" });
+    } catch (error) {
+      this.setState({ siteAdrError: true, siteName: "" });
+      return false;
     }
+
+    // if (this.state.iconAdr === "") {
+
+    // }
 
     if (this.state.siteName === "") {
       const inputUrl = new URL(this.state.siteAdr);
@@ -138,7 +181,12 @@ class RightDrawer extends React.Component {
       await this.setStateAsync({ siteName: nameFromAdr });
     }
 
-    let siteInfo = _object.pick(this.state, ["siteName", "siteAdr", "iconAdr"]);
+    let siteInfo = _object.pick(this.state, [
+      "siteName",
+      "siteAdr",
+      "iconAdr",
+      "favicon"
+    ]);
     this.props.wantAddSite(siteInfo);
     this.setStateInit();
     this.props.wantCloseRightDrawer();
@@ -149,10 +197,19 @@ class RightDrawer extends React.Component {
     this.setStateInit();
     this.props.wantCloseRightDrawer();
   }
-  handlePreview(e) {
+  async handlePreview(e) {
     e.preventDefault();
-    this.setState({ switchButton: false });
-    this.props.wantPreviewIcon(this.state.iconAdr);
+    // 检测图标地址，返回true/false
+    // 如果获取到图片则设置div图片背景并且转换按钮，
+    // 如果获取失败则返回error和message
+    let checkResult = await checkIconPath(this.state.iconAdr);
+
+    if (checkResult) {
+      this.setState({ switchButton: false });
+      this.props.wantPreviewIcon(this.state.iconAdr);
+    } else {
+      this.setState({ iconAdrError: true });
+    }
   }
 
   handleClickAway(e) {
@@ -161,12 +218,21 @@ class RightDrawer extends React.Component {
     this.props.wantCloseRightDrawer();
   }
 
-  handleUnCollapse(e) {
+  // handleUnCollapse(e) {
+  //   e.preventDefault();
+  //   this.setState({ collapseON: true });
+  // }
+
+  handleFileInput(e) {
     e.preventDefault();
-    this.setState({ collapseON: true });
+    {
+      /* TODO: delete leater */
+    }
+    console.log("change file input");
   }
 
   render() {
+    let errorMessage = "请输入正确地址";
     return (
       <div>
         <Slide
@@ -185,7 +251,7 @@ class RightDrawer extends React.Component {
                 </Toolbar>
               </AppBar>
 
-              <div className={Style.siteForm}>
+              <form className={Style.siteForm} encType="multipart/form-data">
                 <div className={Style.formSection}>
                   <SiteInfoInput
                     inputLabel="标题"
@@ -200,28 +266,57 @@ class RightDrawer extends React.Component {
                     inputError={this.state.siteAdrError}
                     currentValue={this.state.siteAdr}
                     onInputChange={this.handleSiteAdrChange}
+                    helperText={this.state.siteAdrError ? errorMessage : ""}
                   />
                 </div>
                 <div className={Style.formSection}>
                   <div className={Style.siteIconBox}>
                     <div id="siteIcon" className={Style.siteIcon} />
-                    <a
+                    {/* <a
                       className={Style.customButton}
                       onClick={e => this.handleUnCollapse(e)}
                     >
                       <span>使用自定义图像</span>
-                    </a>
+                    </a> */}
+                    {/* <div>
+                      <div>style</div>
+                      <div className={Style.RadioGroup}>
+                        <span>
+                          <Radio value="word" aria-label="word" />
+                          word
+                        </span>
+                        <span>
+                          <Radio value="img" aria-label="img" />
+                          img
+                        </span>
+                      </div>
+                    </div> */}
                   </div>
                   {/* TODO:添加错误提示 */}
-                  <Collapse in={this.state.collapseON}>
-                    <div className={Style.webIconInput}>
-                      <SiteInfoInput
-                        inputLabel="图标地址"
-                        currentValue={this.state.iconAdr}
-                        onInputChange={this.handleIconAdrChange}
+                  <div className={Style.webIconInput}>
+                    {/* <SiteInfoInput
+                      inputLabel="图标地址"
+                      inputError={this.state.iconAdrError}
+                      currentValue={this.state.iconAdr}
+                      onInputChange={this.handleIconAdrChange}
+                      helperText={this.state.iconAdrError ? errorMessage : ""}
+                    /> */}
+                    <div className={Style.fileInputBox}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className={Style.actionButton}
+                      >
+                        确认
+                      </Button>
+                      <input
+                        className={Style.fileInput}
+                        onChange={e => this.handleFileInput(e)}
+                        type="file"
+                        accept="image/png, image/jpeg, image/gif, image/jpg"
                       />
                     </div>
-                  </Collapse>
+                  </div>
                 </div>
                 {/* 按钮 */}
                 <div className={Style.formSection}>
@@ -264,7 +359,8 @@ class RightDrawer extends React.Component {
                     </div>
                   </div>
                 </div>
-              </div>
+              </form>
+              <ColorRadios />
             </div>
           </ClickAwayListener>
         </Slide>
@@ -272,5 +368,55 @@ class RightDrawer extends React.Component {
     );
   }
 }
+
+const colors = ["#353535", "#000000", "#FFFFFF", "#00FF00"];
+
+class ColorRadios extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentValue: "#353535"
+    };
+  }
+
+  handleSelectColor(color) {
+    this.setState({ currentValue: color });
+  }
+
+  render() {
+    return (
+      <div>
+        {colors.map((color, index) => (
+          <RadioItem
+            key={index}
+            isSelected={this.state.currentValue === color ? true : false}
+            color={color}
+            onSelectColor={value => this.handleSelectColor(value)}
+          />
+        ))}
+      </div>
+    );
+  }
+}
+
+const RadioItem = props => {
+  const { color, onSelectColor, isSelected } = props;
+  const handleClick = e => {
+    e.preventDefault();
+    onSelectColor(color);
+  };
+  return (
+    <div
+      style={{ borderColor: isSelected === true ? color : "transparent" }}
+      className={Style.outerCircle}
+    >
+      <div
+        style={{ backgroundColor: color }}
+        onClick={e => handleClick(e)}
+        className={Style.innerRound}
+      />
+    </div>
+  );
+};
 
 export default RightDrawer;

@@ -15,14 +15,14 @@ const getImg = () => {
 // getImg();
 
 const ff = async () => {
-  let pp = fetch(imgAdr);
-
-  let resu = await pp;
+  let resu = await fetch(imgAdr);
   let ddaa = await resu.blob();
   let smie = ddaa;
-  console.log(smie);
+  let ioyp = smie.type;
+  let oiuy = ioyp.slice(0, 5);
+  console.log(oiuy);
 };
-
+// ff();
 const missionOne = () => {
   setTimeout(() => {
     console.log("mission 1 done");
@@ -50,4 +50,40 @@ async function asyncPrint(value, ms) {
   console.log(value);
 }
 
-asyncPrint("hello world", 1000);
+// asyncPrint("hello world", 1000);
+
+const checkIconPath = async path => {
+  try {
+    const result = await fetch(path);
+    const data = await result.blob();
+    const dataType = data.type.slice(0, 5);
+    {
+      /* TODO: delete leater */
+    }
+    console.log("dataType", dataType);
+
+    if (dataType === "image") {
+      return true;
+    } else {
+      {
+        /* TODO: delete leater */
+      }
+      console.log("do i here?");
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+
+    return false;
+  }
+};
+
+const lsefio = async () => {
+  let checkResult = await checkIconPath("aa");
+  {
+    /* TODO: delete leater */
+  }
+  console.log("checkResult:", checkResult);
+};
+
+lsefio();
