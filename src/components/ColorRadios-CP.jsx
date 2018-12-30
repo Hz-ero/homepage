@@ -64,11 +64,11 @@ const RadioItem = props => {
 
   const handleClick = e => {
     e.preventDefault();
-    e.stopPropagation();
     clickSelectRadio(radioIndex);
 
     if (props.openColorPicker !== undefined) {
       props.openColorPicker();
+      e.stopPropagation();
     }
   };
 

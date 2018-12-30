@@ -1,6 +1,11 @@
 import { connect } from "react-redux";
 import RightDrawer_CP from "../components/RightDrawer-CP.jsx";
-import { addSite, closeRightDrawer, previewIcon } from "../actions";
+import {
+  addSite,
+  closeRightDrawer,
+  previewIcon,
+  closeColorPicker
+} from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
@@ -19,6 +24,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantPreviewIcon: iconAdr => {
     dispatch(previewIcon(iconAdr));
+  },
+  wantCloseColorPicker: () => {
+    dispatch(closeColorPicker());
   }
 });
 

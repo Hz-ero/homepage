@@ -219,10 +219,7 @@ class RightDrawer extends React.Component {
 
   closeColorPicker(e) {
     e.preventDefault();
-    // this.setState({ pickColor: false });
-    {
-      /* TODO: delete leater */
-    }
+    this.props.wantCloseColorPicker();
   }
 
   handleFileInput(e) {
