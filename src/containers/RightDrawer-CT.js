@@ -5,6 +5,7 @@ import { addSite, closeRightDrawer, previewIcon } from "../actions";
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
   return {
+    colorSelected: immu_state.color.colorSelected,
     signal: immu_state.signal
   };
 };

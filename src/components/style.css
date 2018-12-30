@@ -54,7 +54,6 @@
   height: 96px;
   width: 96px;
   border-radius: 6px;
-  background-color: blue;
 }
 
 .siteName {
@@ -133,19 +132,51 @@
   opacity: 0;
 }
 
-.outerCircle {
+/* .outerCircle {
   border: 2px solid transparent;
   padding: 5px;
   border-radius: 50%;
-}
+} */
 
-.innerRound {
-  height: 20px;
-  width: 20px;
+.radioItem {
+  height: 18px;
+  width: 18px;
+  padding: 2px;
+  margin: 5px 0;
+  cursor: pointer;
+  border: transparent 2px solid;
   border-radius: 50%;
+  background-clip: content-box;
+  background-size: 35%;
 }
 
-.innerRound:hover {
-  height: 22px;
-  width: 22px;
+.radioItem:hover {
+  transform: scale(1.1);
+}
+
+.colorRadios .radioItem:last-child {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 110%;
+  background-image: url(/images/color-picker.png);
+}
+
+.colorRadios {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: content-box;
+}
+
+.colorRadiosBox {
+  position: relative;
+  width: 300px;
+}
+
+.colorPicker {
+  position: absolute;
+  top: 40px;
+  right: 0;
 }

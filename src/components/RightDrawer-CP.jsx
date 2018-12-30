@@ -3,6 +3,8 @@ import Style from "./style.css";
 const _string = require("lodash/string");
 const _object = require("lodash/object");
 const url = require("url");
+import { ChromePicker } from "react-color";
+import ColorRadios_CT from "../containers/ColorRadios-CT";
 import {
   Slide,
   Button,
@@ -10,12 +12,8 @@ import {
   AppBar,
   Typography,
   Toolbar,
-  FormControl,
   TextField,
-  FormLabel,
-  FormControlLabel,
-  RadioGroup,
-  Radio
+  Dialog
 } from "@material-ui/core";
 
 /**
@@ -100,10 +98,10 @@ class RightDrawer extends React.Component {
       siteAdr: "",
       iconAdr: "",
       favicon: "",
-      // collapseON: false,
       siteAdrError: false,
       iconAdrError: false,
-      switchButton: false
+      switchButton: false,
+      iconColor: "#1AFF9C"
     };
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleSiteAdrChange = this.handleSiteAdrChange.bind(this);
@@ -116,10 +114,10 @@ class RightDrawer extends React.Component {
       siteAdr: "",
       iconAdr: "",
       favicon: "",
-      // collapseON: false,
       siteAdrError: false,
       iconAdrError: false,
-      switchButton: false
+      switchButton: false,
+      iconColor: "#1AFF9C"
     });
   }
 
@@ -214,14 +212,18 @@ class RightDrawer extends React.Component {
 
   handleClickAway(e) {
     e.preventDefault();
+
     this.setStateInit();
     this.props.wantCloseRightDrawer();
   }
 
-  // handleUnCollapse(e) {
-  //   e.preventDefault();
-  //   this.setState({ collapseON: true });
-  // }
+  closeColorPicker(e) {
+    e.preventDefault();
+    // this.setState({ pickColor: false });
+    {
+      /* TODO: delete leater */
+    }
+  }
 
   handleFileInput(e) {
     e.preventDefault();
@@ -234,7 +236,7 @@ class RightDrawer extends React.Component {
   render() {
     let errorMessage = "请输入正确地址";
     return (
-      <div>
+      <div onClick={e => this.closeColorPicker(e)}>
         <Slide
           direction="left"
           in={this.props.signal}
@@ -271,7 +273,11 @@ class RightDrawer extends React.Component {
                 </div>
                 <div className={Style.formSection}>
                   <div className={Style.siteIconBox}>
-                    <div id="siteIcon" className={Style.siteIcon} />
+                    <div
+                      style={{ backgroundColor: this.props.colorSelected }}
+                      id="siteIcon"
+                      className={Style.siteIcon}
+                    />
                     {/* <a
                       className={Style.customButton}
                       onClick={e => this.handleUnCollapse(e)}
@@ -307,7 +313,7 @@ class RightDrawer extends React.Component {
                         color="primary"
                         className={Style.actionButton}
                       >
-                        确认
+                        选择图标
                       </Button>
                       <input
                         className={Style.fileInput}
@@ -360,7 +366,8 @@ class RightDrawer extends React.Component {
                   </div>
                 </div>
               </form>
-              <ColorRadios />
+
+              <ColorRadios_CT />
             </div>
           </ClickAwayListener>
         </Slide>
@@ -368,55 +375,5 @@ class RightDrawer extends React.Component {
     );
   }
 }
-
-const colors = ["#353535", "#000000", "#FFFFFF", "#00FF00"];
-
-class ColorRadios extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentValue: "#353535"
-    };
-  }
-
-  handleSelectColor(color) {
-    this.setState({ currentValue: color });
-  }
-
-  render() {
-    return (
-      <div>
-        {colors.map((color, index) => (
-          <RadioItem
-            key={index}
-            isSelected={this.state.currentValue === color ? true : false}
-            color={color}
-            onSelectColor={value => this.handleSelectColor(value)}
-          />
-        ))}
-      </div>
-    );
-  }
-}
-
-const RadioItem = props => {
-  const { color, onSelectColor, isSelected } = props;
-  const handleClick = e => {
-    e.preventDefault();
-    onSelectColor(color);
-  };
-  return (
-    <div
-      style={{ borderColor: isSelected === true ? color : "transparent" }}
-      className={Style.outerCircle}
-    >
-      <div
-        style={{ backgroundColor: color }}
-        onClick={e => handleClick(e)}
-        className={Style.innerRound}
-      />
-    </div>
-  );
-};
 
 export default RightDrawer;
