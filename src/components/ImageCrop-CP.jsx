@@ -17,7 +17,7 @@ const ImageCrop_CP = props => {
     iconColor,
     wantCloseColorPicker,
     wantCloseImageCrop,
-    wantDragEnd
+    wantResizeEnd
   } = props;
   const handleCloseColorPicker = e => {
     e.preventDefault();
@@ -27,13 +27,13 @@ const ImageCrop_CP = props => {
     e.preventDefault();
     wantCloseImageCrop();
   };
-  const handleDragEnd = e => {
+  const handleResizeEnd = e => {
     e.preventDefault();
-    wantDragEnd();
+    wantResizeEnd();
   };
   return (
     <div
-      onMouseUp={e => handleDragEnd(e)}
+      onMouseUp={e => handleResizeEnd(e)}
       onClick={e => handleCloseColorPicker(e)}
       style={{ display: cropState.imageCropSignal ? "flex" : "none" }}
       className={Style.fullScreenModel}

@@ -3,7 +3,7 @@ import ImageCrop_CP from "../components/ImageCrop-CP.jsx";
 import {
   switchColorPicker,
   switchImageCrop,
-  switchDragSignal
+  switchResizeFlag
 } from "../actions/index.js";
 
 const mapStateToProps = (state, ownProps) => {
@@ -21,8 +21,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   wantCloseImageCrop: () => {
     dispatch(switchImageCrop(false));
   },
-  wantDragEnd: () => {
-    dispatch(switchDragSignal(false));
+  wantResizeEnd: () => {
+    dispatch(switchResizeFlag(false));
   }
 });
 

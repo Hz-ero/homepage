@@ -1,6 +1,11 @@
 import { connect } from "react-redux";
 import ColorRadios_CP from "../components/ColorRadios-CP.jsx";
-import { selectRadio, pickOneColor, switchColorPicker } from "../actions";
+import {
+  selectRadio,
+  pickOneColor,
+  switchColorPicker,
+  imageSizeZoom
+} from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
@@ -21,6 +26,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantPickOneColor: color => {
     dispatch(pickOneColor(color));
+  },
+  wantWheelZoom: multiValue => {
+    dispatch(imageSizeZoom(multiValue));
   }
 });
 

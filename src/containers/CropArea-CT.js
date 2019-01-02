@@ -1,6 +1,12 @@
 import { connect } from "react-redux";
 import CropArea_CP from "../components/CropArea-CP.jsx";
-import { dragging } from "../actions/index.js";
+import {
+  resizeing,
+  switchDragFlag,
+  dragStart,
+  dragging,
+  imageSizeZoom
+} from "../actions/index.js";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
@@ -12,8 +18,21 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
+  wantResizeing: newPosition => {
+    dispatch(resizeing(newPosition));
+  },
+  wantDragStart: refPosition => {
+    dispatch(switchDragFlag(true));
+    dispatch(dragStart(refPosition));
+  },
   wantDragging: newPosition => {
     dispatch(dragging(newPosition));
+  },
+  wantDragEnd: () => {
+    dispatch(switchDragFlag(false));
+  },
+  wantWheelZoom: multiValue => {
+    dispatch(imageSizeZoom(multiValue));
   }
 });
 

@@ -41,11 +41,20 @@
   position: absolute;
   top: 0;
   left: 0;
+  height: 310px;
+  width: 310px;
+  overflow: hidden;
+}
+.zoomImageBox {
+  position: absolute;
+}
+
+.userImage {
   height: 100%;
   width: 100%;
 }
 
-.dragCropperBox {
+.remakeCropperBox {
   position: absolute;
   top: 0;
   left: 0;
@@ -53,8 +62,9 @@
   width: 100%;
 }
 
-.cropperBox {
+.resizeCropperBox {
   position: absolute;
+  cursor: move;
 }
 
 .horizenSignBox {

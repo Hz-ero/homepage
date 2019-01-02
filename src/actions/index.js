@@ -16,9 +16,13 @@ import {
   SWITCH_RIGHT_DRAWER,
   SUBMIT_SITE_FORM,
   SWITCH_IMAGE_CROP,
-  SWITCH_DRAG_SIGNAL,
+  SWITCH_RESIZE_FLAG,
+  RESIZE_START,
+  RESIZEING,
+  SWITCH_DRAG_FLAG,
+  DRAGGING,
   DRAG_START,
-  DRAGGING
+  IMAGE_SIZE_ZOOM
 } from "./actionTypes.js";
 
 let nextSiteId = 0;
@@ -70,16 +74,31 @@ export const switchImageCrop = createAction(
   SWITCH_IMAGE_CROP,
   imageCropSignal => ({ imageCropSignal })
 );
-export const switchDragSignal = createAction(
-  SWITCH_DRAG_SIGNAL,
-  dragSignal => ({
-    dragSignal
+export const switchResizeFlag = createAction(
+  SWITCH_RESIZE_FLAG,
+  resizeFlag => ({
+    resizeFlag
   })
 );
-export const dragStart = createAction(DRAG_START, (direction, refPosition) => ({
-  direction,
-  refPosition
+export const switchDragFlag = createAction(SWITCH_DRAG_FLAG, dragFlag => ({
+  dragFlag
+}));
+export const resizeStart = createAction(
+  RESIZE_START,
+  (direction, refPosition) => ({
+    direction,
+    refPosition
+  })
+);
+export const resizeing = createAction(RESIZEING, newPosition => ({
+  newPosition
 }));
 export const dragging = createAction(DRAGGING, newPosition => ({
   newPosition
+}));
+export const dragStart = createAction(DRAG_START, refPosition => ({
+  refPosition
+}));
+export const imageSizeZoom = createAction(IMAGE_SIZE_ZOOM, multiValue => ({
+  multiValue
 }));
