@@ -3,7 +3,6 @@ import Style from "./style.css";
 const _string = require("lodash/string");
 const _object = require("lodash/object");
 const url = require("url");
-import { ChromePicker } from "react-color";
 import ColorRadios_CT from "../containers/ColorRadios-CT";
 import {
   Slide,
@@ -12,8 +11,7 @@ import {
   AppBar,
   Typography,
   Toolbar,
-  TextField,
-  Dialog
+  TextField
 } from "@material-ui/core";
 
 /**
@@ -90,7 +88,7 @@ const SiteInfoInput = props => {
   );
 };
 
-class RightDrawer extends React.Component {
+class RightDrawerTTT extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -99,9 +97,7 @@ class RightDrawer extends React.Component {
       iconAdr: "",
       favicon: "",
       siteAdrError: false,
-      iconAdrError: false,
-      switchButton: false,
-      iconColor: "#1AFF9C"
+      switchButton: false
     };
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleSiteAdrChange = this.handleSiteAdrChange.bind(this);
@@ -115,9 +111,7 @@ class RightDrawer extends React.Component {
       iconAdr: "",
       favicon: "",
       siteAdrError: false,
-      iconAdrError: false,
-      switchButton: false,
-      iconColor: "#1AFF9C"
+      switchButton: false
     });
   }
 
@@ -195,20 +189,20 @@ class RightDrawer extends React.Component {
     this.setStateInit();
     this.props.wantCloseRightDrawer();
   }
-  async handlePreview(e) {
-    e.preventDefault();
-    // 检测图标地址，返回true/false
-    // 如果获取到图片则设置div图片背景并且转换按钮，
-    // 如果获取失败则返回error和message
-    let checkResult = await checkIconPath(this.state.iconAdr);
+  // async handlePreview(e) {
+  //   e.preventDefault();
+  //   // 检测图标地址，返回true/false
+  //   // 如果获取到图片则设置div图片背景并且转换按钮，
+  //   // 如果获取失败则返回error和message
+  //   let checkResult = await checkIconPath(this.state.iconAdr);
 
-    if (checkResult) {
-      this.setState({ switchButton: false });
-      this.props.wantPreviewIcon(this.state.iconAdr);
-    } else {
-      this.setState({ iconAdrError: true });
-    }
-  }
+  //   if (checkResult) {
+  //     this.setState({ switchButton: false });
+  //     this.props.wantPreviewIcon(this.state.iconAdr);
+  //   } else {
+  //     this.setState({ iconAdrError: true });
+  //   }
+  // }
 
   handleClickAway(e) {
     e.preventDefault();
@@ -372,5 +366,126 @@ class RightDrawer extends React.Component {
     );
   }
 }
+
+const RightDrawer = props => {
+  const {
+    siteForm,
+    iconColor,
+    wantCloseColorPicker,
+
+    wantInputSiteName,
+    wantInputSiteAddress,
+    wantSubmitSiteForm,
+    wantOpenImageCrop
+  } = props;
+
+  const handleCloseColorPicker = e => {
+    e.preventDefault();
+    wantCloseColorPicker();
+  };
+
+  const handleNameInput = input => {
+    wantInputSiteName(input.target.value);
+  };
+  const handleAddressInput = input => {
+    wantInputSiteAddress(input.target.value);
+  };
+
+  const handleCancel = e => {
+    e.preventDefault();
+    wantCloseRightDrawer();
+  };
+  const handleSubmit = e => {
+    e.preventDefault();
+    const newSiteInfo = {
+      name: siteForm.name,
+      address: siteForm.address,
+      icon: siteForm.icon,
+      iconColor: iconColor
+    };
+    wantSubmitSiteForm(newSiteInfo);
+  };
+  const handleOpenImageCrop = e => {
+    e.preventDefault();
+    wantOpenImageCrop();
+  };
+
+  return (
+    <div onClick={e => handleCloseColorPicker(e)}>
+      <Slide
+        direction="left"
+        in={siteForm.rightDrawerSignel}
+        mountOnEnter
+        unmountOnExit
+      >
+        <div className={Style.sideDrawer}>
+          {/* ========AppBar=================== */}
+          <AppBar position="static" color="default">
+            <Toolbar>
+              <Typography variant="h6" color="inherit">
+                添加网址
+              </Typography>
+            </Toolbar>
+          </AppBar>
+
+          {/* ==============Site Form=================== */}
+          <form encType="mutipart/form-dat" className={Style.siteForm}>
+            <div className={Style.formSection}>
+              <TextField
+                className={Style.repeatInput}
+                variant="outlined"
+                label="标题"
+                value={siteForm.name}
+                onChange={input => handleNameInput(input)}
+              />
+              <TextField
+                className={Style.repeatInput}
+                variant="outlined"
+                label="地址"
+                value={siteForm.address}
+                onChange={input => handleAddressInput(input)}
+              />
+            </div>
+            <div className={Style.formSection}>
+              <div className={Style.siteIconBox}>
+                <div
+                  style={{ backgroundColor: iconColor }}
+                  className={Style.siteIcon}
+                />
+                <Button onClick={e => handleOpenImageCrop(e)} color="primary">
+                  选择图标
+                </Button>
+              </div>
+            </div>
+            <div className={Style.formSection}>
+              <ColorRadios_CT />
+            </div>
+
+            <div className={Style.formSection}>
+              <div className={Style.actionButtons}>
+                <Button
+                  variant="contained"
+                  color="default"
+                  onClick={e => handleCancel(e)}
+                  className={Style.actionButton}
+                >
+                  取消
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={e => handleSubmit(e)}
+                  className={Style.actionButton}
+                >
+                  确认
+                </Button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </Slide>
+    </div>
+  );
+};
 
 export default RightDrawer;

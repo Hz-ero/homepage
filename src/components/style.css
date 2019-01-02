@@ -6,9 +6,242 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: -255;
+  z-index: 0;
 }
 
+/* ===============ImageCrop_CP======================= */
+.fullScreenModel {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  z-index: 150;
+}
+
+.imageCropBox {
+  width: 310px;
+  padding: 25px;
+  background-color: white;
+  box-sizing: content-box;
+}
+
+/* -------------------------------------- */
+.cropWrapperBox {
+  height: 310px;
+  width: 310px;
+  background-color: aqua;
+  position: relative;
+}
+
+.showImageBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.dragCropperBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.cropperBox {
+  position: absolute;
+}
+
+.horizenSignBox {
+  position: absolute;
+  top: 33.33333%;
+  left: 0;
+  height: 33.33333%;
+  width: 100%;
+  border: 0 dashed #eeeeee;
+  border-width: 1px 0;
+  opacity: 0.5;
+}
+
+.verticalSignBox {
+  position: absolute;
+  top: 0;
+  left: 33.33333%;
+  height: 100%;
+  width: 33.33333%;
+  border: 0 dashed #eeeeee;
+  border-width: 0 1px;
+  opacity: 0.5;
+}
+
+.cropperCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  height: 0;
+  width: 0;
+  opacity: 0.75;
+}
+
+.cropperCenter::before {
+  top: 0;
+  left: -3px;
+  height: 1px;
+  width: 7px;
+}
+.cropperCenter::after {
+  top: -3px;
+  left: 0;
+  height: 7px;
+  width: 1px;
+}
+.cropperCenter::before,
+.cropperCenter::after {
+  position: absolute;
+  display: block;
+  content: " ";
+  background-color: #eeeeee;
+}
+.cropper-line,
+.cropper-point {
+  background-color: #39f;
+  position: absolute;
+  display: block;
+  height: 100%;
+  width: 100%;
+  opacity: 0.1;
+}
+.cropperLineN {
+  composes: cropper-line;
+  top: -3px;
+  left: 0;
+  height: 5px;
+  cursor: n-resize;
+}
+.cropperLineE {
+  composes: cropper-line;
+  top: 0;
+  right: -3px;
+  width: 5px;
+  cursor: e-resize;
+}
+.cropperLineS {
+  composes: cropper-line;
+  bottom: -3px;
+  left: 0;
+  height: 5px;
+  cursor: s-resize;
+}
+.cropperLineW {
+  composes: cropper-line;
+  top: 0;
+  left: -3px;
+  width: 5px;
+  cursor: w-resize;
+}
+.cropper-point {
+  height: 5px;
+  width: 5px;
+  opacity: 0.75;
+}
+.cropperPointN {
+  composes: cropper-point;
+  top: -3px;
+  left: 50%;
+  margin-left: -3px;
+  cursor: n-resize;
+}
+.cropperPointE {
+  composes: cropper-point;
+  top: 50%;
+  right: -3px;
+  margin-top: -3px;
+  cursor: e-resize;
+}
+.cropperPointS {
+  composes: cropper-point;
+  left: 50%;
+  bottom: -3px;
+  margin-left: -3px;
+  cursor: s-resize;
+}
+.cropperPointW {
+  composes: cropper-point;
+  top: 50%;
+  left: -3px;
+  margin-top: -3px;
+  cursor: w-resize;
+}
+.cropperPointNE {
+  composes: cropper-point;
+  top: -3px;
+  right: -3px;
+  cursor: ne-resize;
+}
+.cropperPointNW {
+  composes: cropper-point;
+  top: -3px;
+  left: -3px;
+  cursor: nw-resize;
+}
+.cropperPointSE {
+  composes: cropper-point;
+  bottom: -3px;
+  right: -3px;
+  cursor: se-resize;
+}
+.cropperPointSW {
+  composes: cropper-point;
+  bottom: -3px;
+  left: -3px;
+  cursor: sw-resize;
+}
+/* ------------------------------------------ */
+
+.adjustBox {
+  margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftButton {
+  width: 48px !important;
+  min-width: 48px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.rightButton {
+  margin-left: 5px !important;
+  width: 48px !important;
+  min-width: 48px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.singleButton {
+  width: 66px;
+  height: 30px !important;
+  min-height: 30px !important;
+}
+
+.switchModelButton {
+  height: 40px;
+  width: 100%;
+}
+
+/* ====================================== */
 .sitesPanel {
   width: 840px;
   display: flex;
@@ -82,7 +315,7 @@
 
 .siteIconBox {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
 }
 
 /* .customButton {
@@ -179,4 +412,5 @@
   position: absolute;
   top: 40px;
   right: 0;
+  z-index: 140;
 }

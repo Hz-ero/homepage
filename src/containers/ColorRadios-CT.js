@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import ColorRadios_CP from "../components/ColorRadios-CP.jsx";
-import { selectRadio, openColorPicker, pickOneColor } from "../actions";
+import { selectRadio, pickOneColor, switchColorPicker } from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
@@ -17,7 +17,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(selectRadio(index));
   },
   wantOpenColorPicker: () => {
-    dispatch(openColorPicker());
+    dispatch(switchColorPicker(true));
   },
   wantPickOneColor: color => {
     dispatch(pickOneColor(color));

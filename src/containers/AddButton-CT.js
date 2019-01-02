@@ -1,26 +1,25 @@
-import { connect } from "react-redux"
-import AddButton_CP from "../components/AddButton-CP.jsx"
-import { showRightDrawer } from "../actions"
+import { connect } from "react-redux";
+import AddButton_CP from "../components/AddButton-CP.jsx";
+import { switchRightDrawer } from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
-  
-  const immu_state = state.toObject()
+  const immu_state = state.toObject();
   if (!immu_state.sites.size) {
-    return { siteArray: [] }
+    return { siteArray: [] };
   } else {
-    return { siteArray: immu_state.sites.toJS() }
+    return { siteArray: immu_state.sites.toJS() };
   }
-}
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   wantShowRightDrawer: () => {
-    dispatch(showRightDrawer())
+    dispatch(switchRightDrawer(true));
   }
-})
+});
 
 const AddButton_CT = connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddButton_CP)
+)(AddButton_CP);
 
-export default AddButton_CT
+export default AddButton_CT;

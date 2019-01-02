@@ -2,31 +2,38 @@ import { connect } from "react-redux";
 import RightDrawer_CP from "../components/RightDrawer-CP.jsx";
 import {
   addSite,
-  closeRightDrawer,
+  switchRightDrawer,
   previewIcon,
-  closeColorPicker
+  switchColorPicker,
+  inputSiteName,
+  inputSiteAddress,
+  submitSiteForm,
+  switchImageCrop
 } from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
   return {
-    colorSelected: immu_state.color.colorSelected,
-    signal: immu_state.signal
+    siteForm: immu_state.siteForm,
+    iconColor: immu_state.color.colorSelected
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  wantAddSite: siteInfo => {
-    dispatch(addSite(siteInfo));
-  },
-  wantCloseRightDrawer: () => {
-    dispatch(closeRightDrawer());
-  },
-  wantPreviewIcon: iconAdr => {
-    dispatch(previewIcon(iconAdr));
-  },
   wantCloseColorPicker: () => {
-    dispatch(closeColorPicker());
+    dispatch(switchColorPicker(false));
+  },
+  wantInputSiteName: value => {
+    dispatch(inputSiteName(value));
+  },
+  wantInputSiteAddress: value => {
+    dispatch(inputSiteAddress(value));
+  },
+  wantSubmitSiteForm: value => {
+    dispatch(submitSiteForm(value));
+  },
+  wantOpenImageCrop: () => {
+    dispatch(switchImageCrop(true));
   }
 });
 

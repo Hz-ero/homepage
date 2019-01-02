@@ -1,9 +1,8 @@
 import { createReducer } from "redux-action-tools";
 import {
   SELECT_RADIO,
-  OPEN_COLOR_PICKER,
-  CLOSE_COLOR_PICKER,
-  PICK_ONE_COLOR
+  PICK_ONE_COLOR,
+  SWITCH_COLOR_PICKER
 } from "../actions/actionTypes.js";
 import colors from "../unit/colors";
 
@@ -20,23 +19,16 @@ const setColorSelected = (state, action) => {
   });
 };
 
-const setPickerSignalTrue = (state, action) => {
+const switchColorPicker = (state, action) => {
   return Object.assign({}, state, {
-    pickerSignal: true
-  });
-};
-
-const setPickerSignalFalse = (state, action) => {
-  return Object.assign({}, state, {
-    pickerSignal: false
+    pickerSignal: action.payload.colorPickerSignal
   });
 };
 
 const color = createReducer()
   .when(SELECT_RADIO, logSelectIndex)
-  .when(OPEN_COLOR_PICKER, setPickerSignalTrue)
-  .when(CLOSE_COLOR_PICKER, setPickerSignalFalse)
   .when(PICK_ONE_COLOR, setColorSelected)
+  .when(SWITCH_COLOR_PICKER, switchColorPicker)
   .build({
     radioSelected: 0,
     colorSelected: colors[0],
