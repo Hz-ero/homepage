@@ -1,19 +1,6 @@
 import { createReducer } from "redux-action-tools";
 const _object = require("lodash/object");
-import {
-  SWITCH_IMAGE_CROP,
-  SWITCH_RESIZE_FLAG,
-  RESIZE_START,
-  RESIZEING,
-  SWITCH_DRAG_FLAG,
-  DRAG_START,
-  DRAGGING,
-  IMAGE_SIZE_ZOOM,
-  SET_IMG_DATA,
-  CROP_IMAGE,
-  FINISH_CROP,
-  SET_REF_IMG_SIZE
-} from "../actions/actionTypes";
+import * as Types from "../actions/actionTypes";
 
 const initState = {
   resizePosition: {
@@ -146,18 +133,18 @@ const setRefImgSize = (state, action) => {
   });
 };
 const cropModel = createReducer()
-  .when(SWITCH_IMAGE_CROP, switchImageCrop)
-  .when(SWITCH_RESIZE_FLAG, switchResizeFlag)
-  .when(SWITCH_DRAG_FLAG, switchDragFlag)
-  .when(RESIZE_START, resizeStart)
-  .when(RESIZEING, resizeing)
-  .when(DRAGGING, dragging)
-  .when(DRAG_START, dragStart)
-  .when(IMAGE_SIZE_ZOOM, imageSizeZoom)
-  .when(SET_IMG_DATA, setImgData)
-  .when(CROP_IMAGE, cropImage)
-  .when(FINISH_CROP, finishCrop)
-  .when(SET_REF_IMG_SIZE, setRefImgSize)
+  .when(Types.SWITCH_IMAGE_CROP, switchImageCrop)
+  .when(Types.SWITCH_RESIZE_FLAG, switchResizeFlag)
+  .when(Types.SWITCH_DRAG_FLAG, switchDragFlag)
+  .when(Types.RESIZE_START, resizeStart)
+  .when(Types.RESIZEING, resizeing)
+  .when(Types.DRAGGING, dragging)
+  .when(Types.DRAG_START, dragStart)
+  .when(Types.IMAGE_SIZE_ZOOM, imageSizeZoom)
+  .when(Types.SET_IMG_DATA, setImgData)
+  .when(Types.CROP_IMAGE, cropImage)
+  .when(Types.FINISH_CROP, finishCrop)
+  .when(Types.SET_REF_IMG_SIZE, setRefImgSize)
   .build(initState);
 
 export default cropModel;

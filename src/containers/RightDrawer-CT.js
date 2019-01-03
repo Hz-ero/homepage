@@ -1,13 +1,5 @@
 import { connect } from "react-redux";
-import {
-  addSite,
-  switchColorPicker,
-  inputSiteName,
-  inputSiteAddress,
-  submitSiteForm,
-  switchImageCrop,
-  setImgData
-} from "../actions";
+import * as Actions from "../actions";
 import RightSider_CP from "../components/RightSider-CP.jsx";
 
 const mapStateToProps = (state, ownProps) => {
@@ -21,22 +13,22 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   wantCloseColorPicker: () => {
-    dispatch(switchColorPicker(false));
+    dispatch(Actions.switchColorPicker(false));
   },
   wantInputSiteName: value => {
-    dispatch(inputSiteName(value));
+    dispatch(Actions.inputSiteName(value));
   },
   wantInputSiteAddress: value => {
-    dispatch(inputSiteAddress(value));
+    dispatch(Actions.inputSiteAddress(value));
   },
   wantSubmitSiteForm: value => {
-    dispatch(submitSiteForm(value));
+    dispatch(Actions.submitSiteForm(value));
   },
   wantOpenImageCrop: () => {
-    dispatch(switchImageCrop(true));
+    dispatch(Actions.switchImageCrop(true));
   },
   wantSetImgData: refImgData => {
-    dispatch(setImgData(refImgData));
+    dispatch(Actions.setImgData(refImgData));
   }
 });
 

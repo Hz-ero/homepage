@@ -1,9 +1,5 @@
 import { createReducer } from "redux-action-tools";
-import {
-  SHOW_RIGHT_DRAWER,
-  CLOSE_RIGHT_DRAWER,
-  PREVIEW_ICON
-} from "../actions/actionTypes.js";
+import * as Types from "../actions/actionTypes";
 
 const setSignalToTrue = (state, action) => {
   return true;
@@ -23,8 +19,8 @@ const setSignalToFalse = (state, action) => {
 // };
 
 const signal = createReducer()
-  .when(SHOW_RIGHT_DRAWER, setSignalToTrue)
-  .when(CLOSE_RIGHT_DRAWER, setSignalToFalse)
+  .when(Types.SHOW_RIGHT_DRAWER, setSignalToTrue)
+  .when(Types.CLOSE_RIGHT_DRAWER, setSignalToFalse)
   // .when(PREVIEW_ICON, setImgSrc)
   .build(false);
 

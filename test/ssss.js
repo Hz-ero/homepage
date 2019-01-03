@@ -1,5 +1,6 @@
 const _object = require("lodash/object");
-
+import * as types from "../src/actions/actionTypes";
+types;
 const initState = {
   resizePosition: {
     top: 0,

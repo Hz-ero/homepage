@@ -1,13 +1,6 @@
 import { connect } from "react-redux";
 import CropArea_CP from "../components/CropArea-CP.jsx";
-import {
-  resizeing,
-  switchDragFlag,
-  dragStart,
-  dragging,
-  imageSizeZoom,
-  setRefImgSize
-} from "../actions/index.js";
+import * as Actions from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
@@ -20,23 +13,23 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   wantResizeing: newPosition => {
-    dispatch(resizeing(newPosition));
+    dispatch(Actions.resizeing(newPosition));
   },
   wantDragStart: refPosition => {
-    dispatch(switchDragFlag(true));
-    dispatch(dragStart(refPosition));
+    dispatch(Actions.switchDragFlag(true));
+    dispatch(Actions.dragStart(refPosition));
   },
   wantDragging: newPosition => {
-    dispatch(dragging(newPosition));
+    dispatch(Actions.dragging(newPosition));
   },
   wantDragEnd: () => {
-    dispatch(switchDragFlag(false));
+    dispatch(Actions.switchDragFlag(false));
   },
   wantWheelZoom: multiValue => {
-    dispatch(imageSizeZoom(multiValue));
+    dispatch(Actions.imageSizeZoom(multiValue));
   },
   wantSetRefImgSize: refImgSize => {
-    dispatch(setRefImgSize(refImgSize));
+    dispatch(Actions.setRefImgSize(refImgSize));
   }
 });
 

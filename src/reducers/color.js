@@ -1,9 +1,5 @@
 import { createReducer } from "redux-action-tools";
-import {
-  SELECT_RADIO,
-  PICK_ONE_COLOR,
-  SWITCH_COLOR_PICKER
-} from "../actions/actionTypes.js";
+import * as Types from "../actions/actionTypes";
 import colors from "../unit/colors";
 
 const logSelectIndex = (state, action) => {
@@ -26,9 +22,9 @@ const switchColorPicker = (state, action) => {
 };
 
 const color = createReducer()
-  .when(SELECT_RADIO, logSelectIndex)
-  .when(PICK_ONE_COLOR, setColorSelected)
-  .when(SWITCH_COLOR_PICKER, switchColorPicker)
+  .when(Types.SELECT_RADIO, logSelectIndex)
+  .when(Types.PICK_ONE_COLOR, setColorSelected)
+  .when(Types.SWITCH_COLOR_PICKER, switchColorPicker)
   .build({
     radioSelected: 0,
     colorSelected: colors[0],

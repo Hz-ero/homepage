@@ -1,12 +1,5 @@
 import { createReducer } from "redux-action-tools";
-import {
-  SWITCH_RIGHT_DRAWER,
-  INPUT_SITE_NAME,
-  INPUT_SITE_ADDRESS,
-  INPUT_ICON_REFERENCE,
-  INPUT_ADR_ERROR,
-  INPUT_FAVICON_ADR
-} from "../actions/actionTypes";
+import * as Types from "../actions/actionTypes";
 
 const initState = {
   name: "",
@@ -52,12 +45,12 @@ const switchRightDrawer = (state, action) => {
 };
 
 const siteForm = createReducer()
-  .when(INPUT_SITE_NAME, inputSiteName)
-  .when(INPUT_SITE_ADDRESS, inputSiteAddress)
-  .when(INPUT_ICON_REFERENCE, inputIconReference)
-  .when(INPUT_ADR_ERROR, inputAdrError)
-  .when(INPUT_FAVICON_ADR, inputFaviconAdr)
-  .when(SWITCH_RIGHT_DRAWER, switchRightDrawer)
+  .when(Types.INPUT_SITE_NAME, inputSiteName)
+  .when(Types.INPUT_SITE_ADDRESS, inputSiteAddress)
+  .when(Types.INPUT_ICON_REFERENCE, inputIconReference)
+  .when(Types.INPUT_ADR_ERROR, inputAdrError)
+  .when(Types.INPUT_FAVICON_ADR, inputFaviconAdr)
+  .when(Types.SWITCH_RIGHT_DRAWER, switchRightDrawer)
   .build(initState);
 
 export default siteForm;

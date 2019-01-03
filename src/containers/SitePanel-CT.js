@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import SitePanel_CP from "../components/SitePanel-CP.jsx";
-import { switchRightDrawer } from "../actions/index.js";
+import * as Actions from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   wantCloseRightDrawer: () => {
-    dispatch(switchRightDrawer(false));
+    dispatch(Actions.switchRightDrawer(false));
   }
 });
 

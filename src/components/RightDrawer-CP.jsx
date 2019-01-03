@@ -1,18 +1,4 @@
-import React from "react";
-import Style from "./style.css";
-const _string = require("lodash/string");
-const _object = require("lodash/object");
 const url = require("url");
-import ColorRadios_CT from "../containers/ColorRadios-CT";
-import {
-  Slide,
-  Button,
-  ClickAwayListener,
-  AppBar,
-  Typography,
-  Toolbar,
-  TextField
-} from "@material-ui/core";
 
 /**
  * 将网站域名转换为网站标题
@@ -53,39 +39,6 @@ const checkIconPath = async path => {
   } catch (error) {
     return false;
   }
-};
-
-/**
- * 组件：可复用输入框
- *
- * @param {*} props
- * @returns
- */
-const SiteInfoInput = props => {
-  const {
-    helperText,
-    inputLabel,
-    inputError,
-    currentValue,
-    onInputChange
-  } = props;
-
-  const handleChange = input => {
-    onInputChange(input.target.value);
-  };
-  return (
-    <div>
-      <TextField
-        className={Style.repeatInput}
-        variant="outlined"
-        label={inputLabel}
-        error={inputError}
-        value={currentValue}
-        onChange={handleChange}
-        helperText={helperText}
-      />
-    </div>
-  );
 };
 
 class RightDrawerTTT extends React.Component {
@@ -139,56 +92,6 @@ class RightDrawerTTT extends React.Component {
     this.props.wantAddSite(siteInfo);
     this.setStateInit();
     this.props.wantCloseRightDrawer();
-  }
-
-  render() {
-    let errorMessage = "请输入正确地址";
-    return (
-      <div onClick={e => this.closeColorPicker(e)}>
-        <Slide
-          direction="left"
-          in={this.props.signal}
-          mountOnEnter
-          unmountOnExit
-        >
-          <ClickAwayListener onClickAway={e => this.handleClickAway(e)}>
-            <div className={Style.sideDrawer}>
-              <form className={Style.siteForm} encType="multipart/form-data">
-                <div className={Style.formSection}>
-                  <div className={Style.siteIconBox}>
-                    <div
-                      style={{ backgroundColor: this.props.colorSelected }}
-                      id="siteIcon"
-                      className={Style.siteIcon}
-                    />
-                  </div>
-                  {/* TODO:添加错误提示 */}
-                  <div className={Style.webIconInput}>
-                    <div className={Style.fileInputBox}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        className={Style.actionButton}
-                      >
-                        选择图标
-                      </Button>
-                      <input
-                        className={Style.fileInput}
-                        onChange={e => this.handleFileInput(e)}
-                        type="file"
-                        accept="image/png, image/jpeg, image/gif, image/jpg"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </form>
-
-              <ColorRadios_CT />
-            </div>
-          </ClickAwayListener>
-        </Slide>
-      </div>
-    );
   }
 }
 

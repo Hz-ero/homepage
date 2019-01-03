@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import AddButton_CP from "../components/AddButton-CP.jsx";
-import { switchRightDrawer } from "../actions";
+import * as Actions from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   wantShowRightDrawer: () => {
-    dispatch(switchRightDrawer(true));
+    dispatch(Actions.switchRightDrawer(true));
   }
 });
 
