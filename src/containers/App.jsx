@@ -1,7 +1,6 @@
 import React from "react";
 import RightDrawer_CT from "./RightDrawer-CT";
 import AddButton_CT from "./AddButton-CT";
-import Test_CP from "../components/Test-CP.jsx";
 import { CssBaseline } from "@material-ui/core";
 import { HashRouter as Router, Route, Link } from "react-router-dom";
 import ImageCrop_CT from "./ImageCrop-CT";
@@ -12,9 +11,15 @@ const App = () => (
   <Router>
     <div>
       <Route exact path="/" component={Home} />
-      <Route path="/test" component={CropArea_CT} />
+      <Route path="/test" component={Test} />
     </div>
   </Router>
+);
+
+const Test = () => (
+  <div>
+    <CropArea_CT />
+  </div>
 );
 
 const Home = () => (
