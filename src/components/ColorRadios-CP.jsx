@@ -5,13 +5,20 @@ import { ChromePicker } from "react-color";
 
 const ColorRadios_CP = props => {
   const {
-    radioSelected,
-    colorSelected,
-    pickerSignal,
+    colorState,
+    outerNode,
     wantClickSelectRadio,
     wantOpenColorPicker,
+    wantSetOuterNode,
     wantPickOneColor
   } = props;
+
+  let colorPickerShow;
+  if (outerNode === colorState.outerNode && colorState.pickerSignal) {
+    colorPickerShow = true;
+  } else {
+    colorPickerShow = false;
+  }
 
   const stopClickSpread = e => {
     e.preventDefault();
@@ -32,20 +39,22 @@ const ColorRadios_CP = props => {
             key={index}
             radioIndex={index}
             colorValue={color}
-            radioSelected={radioSelected}
-            colorSelected={colorSelected}
+            radioSelected={colorState.radioSelected}
+            colorSelected={colorState.colorSelected}
             clickSelectRadio={wantClickSelectRadio}
-            openColorPicker={index === 10 ? wantOpenColorPicker : undefined}
+            wantOpenColorPicker={index === 10 ? wantOpenColorPicker : undefined}
+            outerNode={index === 10 ? outerNode : undefined}
+            wantSetOuterNode={index === 10 ? wantSetOuterNode : undefined}
           />
         ))}
       </div>
       <div
         className={Style.colorPicker}
-        style={{ display: pickerSignal ? "block" : "none" }}
+        style={{ display: colorPickerShow ? "block" : "none" }}
         onClick={e => stopClickSpread(e)}
       >
         <ChromePicker
-          color={colorSelected}
+          color={colorState.colorSelected}
           onChange={(color, e) => pickOneColor(color, e)}
         />
       </div>
@@ -66,9 +75,15 @@ const RadioItem = props => {
     e.preventDefault();
     clickSelectRadio(radioIndex);
 
-    if (props.openColorPicker !== undefined) {
-      props.openColorPicker();
+    if (radioIndex === 10) {
+      {
+        /* TODO: delete leater */
+      }
+      console.log(props);
+
       e.stopPropagation();
+      props.wantOpenColorPicker();
+      props.wantSetOuterNode(props.outerNode);
     }
   };
 

@@ -1,12 +1,6 @@
 import { connect } from "react-redux";
 import ImageCrop_CP from "../components/ImageCrop-CP.jsx";
-import {
-  switchColorPicker,
-  switchImageCrop,
-  switchResizeFlag,
-  cropImage,
-  finishCrop
-} from "../actions/index.js";
+import * as Actions from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
@@ -18,16 +12,24 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   wantCloseColorPicker: () => {
-    dispatch(switchColorPicker(false));
+    dispatch(Actions.switchColorPicker(false));
   },
   wantCloseImageCrop: () => {
-    dispatch(finishCrop());
+    dispatch(Actions.finishCrop());
   },
   wantResizeEnd: () => {
-    dispatch(switchResizeFlag(false));
+    dispatch(Actions.switchResizeFlag(false));
   },
   wantCropImage: () => {
-    dispatch(cropImage());
+    dispatch(Actions.cropImage());
+  },
+  wantZoomImg: multiValue => {
+    dispatch(Actions.imageSizeZoom(multiValue));
+    dispatch(Actions.cropImage());
+  },
+  wantResetImgCrop: () => {
+    dispatch(Actions.resetImgCrop());
+    dispatch(Actions.cropImage());
   }
 });
 

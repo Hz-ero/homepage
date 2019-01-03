@@ -22,7 +22,8 @@ const RightSider_CP = props => {
     wantInputSiteAddress,
     wantSubmitSiteForm,
     wantSetImgData,
-    wantOpenImageCrop
+    wantOpenImageCrop,
+    wantCloseRightDrawer
   } = props;
 
   const handleCloseColorPicker = e => {
@@ -129,7 +130,7 @@ const RightSider_CP = props => {
               </div>
             </div>
             {/* ------背景选择------- */}
-            <ColorRadios_CT />
+            <ColorRadios_CT outerNode="rightSider" />
             {/* ------按钮------- */}
             <div className={Style.formSection}>
               <div className={Style.actionButtons}>

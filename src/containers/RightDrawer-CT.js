@@ -29,6 +29,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantSetImgData: refImgData => {
     dispatch(Actions.setImgData(refImgData));
+  },
+  wantCloseRightDrawer: () => {
+    dispatch(Actions.switchRightDrawer(false));
   }
 });
 

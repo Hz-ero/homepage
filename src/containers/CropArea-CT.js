@@ -14,6 +14,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   wantResizeing: newPosition => {
     dispatch(Actions.resizeing(newPosition));
+    dispatch(Actions.cropImage());
   },
   wantDragStart: refPosition => {
     dispatch(Actions.switchDragFlag(true));
@@ -21,15 +22,18 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantDragging: newPosition => {
     dispatch(Actions.dragging(newPosition));
+    dispatch(Actions.cropImage());
   },
   wantDragEnd: () => {
     dispatch(Actions.switchDragFlag(false));
   },
-  wantWheelZoom: multiValue => {
+  wantZoomImg: multiValue => {
     dispatch(Actions.imageSizeZoom(multiValue));
+    dispatch(Actions.cropImage());
   },
   wantSetRefImgSize: refImgSize => {
     dispatch(Actions.setRefImgSize(refImgSize));
+    dispatch(Actions.cropImage());
   }
 });
 

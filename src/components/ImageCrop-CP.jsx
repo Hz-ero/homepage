@@ -18,7 +18,9 @@ const ImageCrop_CP = props => {
     wantCloseColorPicker,
     wantCloseImageCrop,
     wantCropImage,
-    wantResizeEnd
+    wantResizeEnd,
+    wantResetImgCrop,
+    wantZoomImg
   } = props;
   const handleCloseColorPicker = e => {
     e.preventDefault();
@@ -33,6 +35,18 @@ const ImageCrop_CP = props => {
     e.preventDefault();
     wantResizeEnd();
   };
+  const handleResetImgCrop = e => {
+    e.preventDefault();
+    wantResetImgCrop();
+  };
+  const handleZoomInImg = e => {
+    e.preventDefault();
+    wantZoomImg(1.15);
+  };
+  const handleZoomOutImg = e => {
+    e.preventDefault();
+    wantZoomImg(0.85);
+  };
   return (
     <div
       onMouseUp={e => handleResizeEnd(e)}
@@ -45,7 +59,7 @@ const ImageCrop_CP = props => {
         <CropArea_CT />
         {/* ================================= */}
 
-        <ColorRadios_CT />
+        <ColorRadios_CT outerNode="imageCrop" />
         <div className={Style.adjustBox}>
           <div>
             <Button
@@ -68,6 +82,7 @@ const ImageCrop_CP = props => {
               size="small"
               variant="contained"
               className={Style.leftButton}
+              onClick={e => handleZoomInImg(e)}
             >
               {/* <ZoomIn /> */}
             </Button>
@@ -75,6 +90,7 @@ const ImageCrop_CP = props => {
               size="small"
               variant="contained"
               className={Style.rightButton}
+              onClick={e => handleZoomOutImg(e)}
             >
               {/* <ZoomOut /> */}
             </Button>
@@ -83,6 +99,7 @@ const ImageCrop_CP = props => {
             size="small"
             variant="contained"
             className={Style.singleButton}
+            onClick={e => handleResetImgCrop(e)}
           >
             {/* <Cached /> */}
           </Button>

@@ -10,12 +10,9 @@ const CropArea_CP = props => {
     wantDragStart,
     wantDragging,
     wantDragEnd,
-    wantWheelZoom,
+    wantZoomImg,
     wantSetRefImgSize
   } = props;
-  let resizeTop = cropState.resizePosition.top.toString() + "px";
-  let resizeLeft = cropState.resizePosition.left.toString() + "px";
-  let resizeLength = cropState.resizePosition.length.toString() + "px";
 
   const handleResizeing = e => {
     e.preventDefault();
@@ -53,7 +50,7 @@ const CropArea_CP = props => {
 
   const handleWheelZoom = e => {
     e.preventDefault();
-    wantWheelZoom(e.deltaY * -0.15);
+    wantZoomImg(1 + e.deltaY * -0.15);
   };
 
   const handleUserImgLoad = e => {

@@ -25,3 +25,6 @@ export const SET_IMG_DATA = "SET_IMG_DATA";
 export const CROP_IMAGE = "CROP_IMAGE";
 export const FINISH_CROP = "FINISH_CROP";
 export const SET_REF_IMG_SIZE = "SET_REF_IMG_SIZE";
+export const RESET_IMG_CROP = "RESET_IMG_CROP";
+export const SET_OUTER_NODE = "SET_OUTER_NODE";
+export const RESET_COLOR_PICKER = "RESET_COLOR_PICKER";

@@ -14,15 +14,24 @@ const initState = {
     length: 310
   },
   direction: "",
-  imageCropSignal: false,
   resizeFlag: false,
   dragFlag: false,
   refPosition: null,
+  imageCropSignal: false,
   refImgSize: null,
   refImgData: null,
   newImgData: null
 };
+const resetImgCrop = (state, action) => {
+  let newState = _object.omit(initState, [
+    "refImgData",
+    "newImgData",
+    "imageCropSignal",
+    "refImgSize"
+  ]);
 
+  return Object.assign({}, state, newState);
+};
 const switchImageCrop = (state, action) => {
   return Object.assign({}, state, {
     imageCropSignal: action.payload.imageCropSignal
@@ -89,7 +98,7 @@ const resizeing = (state, action) => {
 };
 const imageSizeZoom = (state, action) => {
   let oldPosition = state.zoomPosition;
-  let newLength = oldPosition.length * (1 + action.payload.multiValue);
+  let newLength = oldPosition.length * action.payload.multiValue;
   let newTop = oldPosition.top + (oldPosition.length - newLength) / 2;
   let newLeft = newTop;
 
@@ -123,7 +132,11 @@ const cropImage = (state, action) => {
   });
 };
 const finishCrop = (state, action) => {
-  let newState = _object.omit(initState, ["refImgData", "newImgData"]);
+  let newState = _object.omit(initState, [
+    "refImgData",
+    "newImgData",
+    "refImgSize"
+  ]);
 
   return Object.assign({}, state, newState);
 };
@@ -145,6 +158,7 @@ const cropModel = createReducer()
   .when(Types.CROP_IMAGE, cropImage)
   .when(Types.FINISH_CROP, finishCrop)
   .when(Types.SET_REF_IMG_SIZE, setRefImgSize)
+  .when(Types.RESET_IMG_CROP, resetImgCrop)
   .build(initState);
 
 export default cropModel;

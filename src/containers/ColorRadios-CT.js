@@ -6,9 +6,8 @@ const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
 
   return {
-    radioSelected: immu_state.color.radioSelected,
-    colorSelected: immu_state.color.colorSelected,
-    pickerSignal: immu_state.color.pickerSignal
+    colorState: immu_state.color,
+    outerNode: ownProps.outerNode
   };
 };
 
@@ -22,8 +21,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   wantPickOneColor: color => {
     dispatch(Actions.pickOneColor(color));
   },
-  wantWheelZoom: multiValue => {
-    dispatch(Actions.imageSizeZoom(multiValue));
+  wantSetOuterNode: outerNode => {
+    dispatch(Actions.setOuterNode(outerNode));
   }
 });
 

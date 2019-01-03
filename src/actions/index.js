@@ -10,13 +10,18 @@ export const selectRadio = createAction(Types.SELECT_RADIO, index => ({
 
 export const switchColorPicker = createAction(
   Types.SWITCH_COLOR_PICKER,
-  colorPickerSignal => ({ colorPickerSignal })
+  pickerSignal => ({ pickerSignal })
 );
 
 export const pickOneColor = createAction(Types.PICK_ONE_COLOR, color => ({
   colorPicked: color
 }));
 
+export const setOuterNode = createAction(Types.SET_OUTER_NODE, outerNode => ({
+  outerNode
+}));
+
+export const resetColorPicker = createAction(Types.RESET_COLOR_PICKER);
 // ======================================
 export const previewIcon = createAction(Types.PREVIEW_ICON, iconAdr => ({
   iconAdr
@@ -111,3 +116,4 @@ export const setRefImgSize = createAction(
     refImgSize
   })
 );
+export const resetImgCrop = createAction(Types.RESET_IMG_CROP);
