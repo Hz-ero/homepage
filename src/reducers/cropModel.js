@@ -1,4 +1,5 @@
 import { createReducer } from "redux-action-tools";
+const _object = require("lodash/object");
 import {
   SWITCH_IMAGE_CROP,
   SWITCH_RESIZE_FLAG,
@@ -7,7 +8,11 @@ import {
   SWITCH_DRAG_FLAG,
   DRAG_START,
   DRAGGING,
-  IMAGE_SIZE_ZOOM
+  IMAGE_SIZE_ZOOM,
+  SET_IMG_DATA,
+  CROP_IMAGE,
+  FINISH_CROP,
+  SET_REF_IMG_SIZE
 } from "../actions/actionTypes";
 
 const initState = {
@@ -25,7 +30,10 @@ const initState = {
   imageCropSignal: false,
   resizeFlag: false,
   dragFlag: false,
-  refPosition: null
+  refPosition: null,
+  refImgSize: null,
+  refImgData: null,
+  newImgData: null
 };
 
 const switchImageCrop = (state, action) => {
@@ -102,6 +110,41 @@ const imageSizeZoom = (state, action) => {
     zoomPosition: { top: newTop, left: newLeft, length: newLength }
   });
 };
+const setImgData = (state, action) => {
+  return Object.assign({}, state, {
+    refImgData: action.payload.refImgData
+  });
+};
+const cropImage = (state, action) => {
+  let _cropCanvas = document.createElement("canvas");
+  _cropCanvas.height = 96;
+  _cropCanvas.width = 96;
+
+  let multiValue = state.refImgSize.height / 310;
+  let sx = (state.resizePosition.left - state.zoomPosition.left) * multiValue;
+  let sy = (state.resizePosition.top - state.zoomPosition.top) * multiValue;
+  let sLength = state.resizePosition.length * multiValue;
+
+  _cropCanvas
+    .getContext("2d")
+    .drawImage(userImage, sx, sy, sLength, sLength, 0, 0, 96, 96);
+  // 保存图片信息
+  let _newImgData = _cropCanvas.toDataURL("image/png");
+
+  return Object.assign({}, state, {
+    newImgData: _newImgData
+  });
+};
+const finishCrop = (state, action) => {
+  let newState = _object.omit(initState, ["refImgData", "newImgData"]);
+
+  return Object.assign({}, state, newState);
+};
+const setRefImgSize = (state, action) => {
+  return Object.assign({}, state, {
+    refImgSize: action.payload.refImgSize
+  });
+};
 const cropModel = createReducer()
   .when(SWITCH_IMAGE_CROP, switchImageCrop)
   .when(SWITCH_RESIZE_FLAG, switchResizeFlag)
@@ -111,6 +154,10 @@ const cropModel = createReducer()
   .when(DRAGGING, dragging)
   .when(DRAG_START, dragStart)
   .when(IMAGE_SIZE_ZOOM, imageSizeZoom)
+  .when(SET_IMG_DATA, setImgData)
+  .when(CROP_IMAGE, cropImage)
+  .when(FINISH_CROP, finishCrop)
+  .when(SET_REF_IMG_SIZE, setRefImgSize)
   .build(initState);
 
 export default cropModel;

@@ -17,14 +17,16 @@ const ImageCrop_CP = props => {
     iconColor,
     wantCloseColorPicker,
     wantCloseImageCrop,
+    wantCropImage,
     wantResizeEnd
   } = props;
   const handleCloseColorPicker = e => {
     e.preventDefault();
     wantCloseColorPicker();
   };
-  const handleCloseImageCrop = e => {
+  const handleCompleteCrop = e => {
     e.preventDefault();
+    wantCropImage();
     wantCloseImageCrop();
   };
   const handleResizeEnd = e => {
@@ -86,7 +88,7 @@ const ImageCrop_CP = props => {
           </Button>
         </div>
         <Button
-          onClick={e => handleCloseImageCrop(e)}
+          onClick={e => handleCompleteCrop(e)}
           variant="contained"
           className={Style.switchModelButton}
         >

@@ -22,7 +22,11 @@ import {
   SWITCH_DRAG_FLAG,
   DRAGGING,
   DRAG_START,
-  IMAGE_SIZE_ZOOM
+  IMAGE_SIZE_ZOOM,
+  SET_IMG_DATA,
+  CROP_IMAGE,
+  FINISH_CROP,
+  SET_REF_IMG_SIZE
 } from "./actionTypes.js";
 
 let nextSiteId = 0;
@@ -101,4 +105,12 @@ export const dragStart = createAction(DRAG_START, refPosition => ({
 }));
 export const imageSizeZoom = createAction(IMAGE_SIZE_ZOOM, multiValue => ({
   multiValue
+}));
+export const setImgData = createAction(SET_IMG_DATA, refImgData => ({
+  refImgData
+}));
+export const cropImage = createAction(CROP_IMAGE);
+export const finishCrop = createAction(FINISH_CROP);
+export const setRefImgSize = createAction(SET_REF_IMG_SIZE, refImgSize => ({
+  refImgSize
 }));

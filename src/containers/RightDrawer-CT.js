@@ -1,19 +1,21 @@
 import { connect } from "react-redux";
-import RightDrawer_CP from "../components/RightDrawer-CP.jsx";
 import {
   addSite,
   switchColorPicker,
   inputSiteName,
   inputSiteAddress,
   submitSiteForm,
-  switchImageCrop
+  switchImageCrop,
+  setImgData
 } from "../actions";
+import RightSider_CP from "../components/RightSider-CP.jsx";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
   return {
     siteForm: immu_state.siteForm,
-    iconColor: immu_state.color.colorSelected
+    iconColor: immu_state.color.colorSelected,
+    cropState: immu_state.cropModel
   };
 };
 
@@ -32,12 +34,15 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantOpenImageCrop: () => {
     dispatch(switchImageCrop(true));
+  },
+  wantSetImgData: refImgData => {
+    dispatch(setImgData(refImgData));
   }
 });
 
 const RightDrawer_CT = connect(
   mapStateToProps,
   mapDispatchToProps
-)(RightDrawer_CP);
+)(RightSider_CP);
 
 export default RightDrawer_CT;

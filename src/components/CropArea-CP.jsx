@@ -10,7 +10,8 @@ const CropArea_CP = props => {
     wantDragStart,
     wantDragging,
     wantDragEnd,
-    wantWheelZoom
+    wantWheelZoom,
+    wantSetRefImgSize
   } = props;
   let resizeTop = cropState.resizePosition.top.toString() + "px";
   let resizeLeft = cropState.resizePosition.left.toString() + "px";
@@ -55,6 +56,14 @@ const CropArea_CP = props => {
     wantWheelZoom(e.deltaY * -0.15);
   };
 
+  const handleUserImgLoad = e => {
+    e.preventDefault();
+    wantSetRefImgSize({
+      height: e.target.naturalHeight,
+      width: e.target.naturalWidth
+    });
+  };
+
   return (
     <div
       style={{ backgroundColor: iconColor }}
@@ -73,9 +82,11 @@ const CropArea_CP = props => {
           className={Style.zoomImageBox}
         >
           <img
-            src="./images/avatar.png"
+            id="userImage"
+            src={cropState.refImgData}
             alt="img"
             className={Style.userImage}
+            onLoad={e => handleUserImgLoad(e)}
           />
         </div>
       </div>

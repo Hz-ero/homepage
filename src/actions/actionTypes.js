@@ -21,3 +21,7 @@ export const RESIZEING = "RESIZEING";
 export const DRAG_START = "DRAG_START";
 export const DRAGGING = "DRAGGING";
 export const IMAGE_SIZE_ZOOM = "IMAGE_SIZE_ZOOM";
+export const SET_IMG_DATA = "SET_IMG_DATA";
+export const CROP_IMAGE = "CROP_IMAGE";
+export const FINISH_CROP = "FINISH_CROP";
+export const SET_REF_IMG_SIZE = "SET_REF_IMG_SIZE";

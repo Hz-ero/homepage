@@ -5,7 +5,8 @@ import {
   switchDragFlag,
   dragStart,
   dragging,
-  imageSizeZoom
+  imageSizeZoom,
+  setRefImgSize
 } from "../actions/index.js";
 
 const mapStateToProps = (state, ownProps) => {
@@ -33,6 +34,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantWheelZoom: multiValue => {
     dispatch(imageSizeZoom(multiValue));
+  },
+  wantSetRefImgSize: refImgSize => {
+    dispatch(setRefImgSize(refImgSize));
   }
 });
 
