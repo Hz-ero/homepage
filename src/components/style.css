@@ -328,22 +328,9 @@
   align-items: center;
 }
 
-/* .customButton {
-  font-size: 13px;
-  color: rgb(69, 161, 255);
-  cursor: pointer;
-  text-decoration: none;
-  margin-left: 20px;
-} */
-
 .actionButton {
   font-size: 24px;
   width: 120px;
-}
-
-.webIconInput {
-  width: 100%;
-  margin-top: 24px;
 }
 
 .formSection {
@@ -374,12 +361,6 @@
   top: 0;
   opacity: 0;
 }
-
-/* .outerCircle {
-  border: 2px solid transparent;
-  padding: 5px;
-  border-radius: 50%;
-} */
 
 .radioItem {
   height: 18px;

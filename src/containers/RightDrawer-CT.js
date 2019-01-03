@@ -2,8 +2,6 @@ import { connect } from "react-redux";
 import RightDrawer_CP from "../components/RightDrawer-CP.jsx";
 import {
   addSite,
-  switchRightDrawer,
-  previewIcon,
   switchColorPicker,
   inputSiteName,
   inputSiteAddress,
