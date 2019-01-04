@@ -3,8 +3,8 @@ import * as Types from "../actions/actionTypes";
 import colors from "../unit/colors";
 
 const initState = {
-  radioSelected: 0,
-  colorSelected: colors[0],
+  radioSelected: 1,
+  colorSelected: colors[1],
   pickerSignal: false,
   outerNode: ""
 };

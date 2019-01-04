@@ -1,10 +1,8 @@
 import React from "react";
 import Style from "./style.css";
-// import ColorRadios_CT from "../containers/ColorRadios-CT";
 import {
   Slide,
   Button,
-  ClickAwayListener,
   AppBar,
   Typography,
   Toolbar,
@@ -16,6 +14,7 @@ const RightSider_CP = props => {
   const {
     siteForm,
     iconColor,
+    radioSelected,
     cropState,
     wantCloseColorPicker,
     wantInputSiteName,
@@ -123,7 +122,9 @@ const RightSider_CP = props => {
               <div className={Style.siteIconBox}>
                 <div
                   style={{ backgroundColor: iconColor }}
-                  className={Style.siteIcon}
+                  className={
+                    radioSelected === 0 ? Style.siteIconWithImg : Style.siteIcon
+                  }
                 >
                   <img src={cropState.newImgData} className={Style.resultImg} />
                 </div>

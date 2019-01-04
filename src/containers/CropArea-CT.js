@@ -7,6 +7,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     iconColor: immu_state.color.colorSelected,
+    radioSelected: immu_state.color.radioSelected,
     cropState: immu_state.cropModel
   };
 };

@@ -42,9 +42,9 @@ const ColorRadios_CP = props => {
             radioSelected={colorState.radioSelected}
             colorSelected={colorState.colorSelected}
             clickSelectRadio={wantClickSelectRadio}
-            wantOpenColorPicker={index === 10 ? wantOpenColorPicker : undefined}
-            outerNode={index === 10 ? outerNode : undefined}
-            wantSetOuterNode={index === 10 ? wantSetOuterNode : undefined}
+            wantOpenColorPicker={index === 11 ? wantOpenColorPicker : undefined}
+            outerNode={index === 11 ? outerNode : undefined}
+            wantSetOuterNode={index === 11 ? wantSetOuterNode : undefined}
           />
         ))}
       </div>
@@ -75,7 +75,7 @@ const RadioItem = props => {
     e.preventDefault();
     clickSelectRadio(radioIndex);
 
-    if (radioIndex === 10) {
+    if (radioIndex === 11) {
       {
         /* TODO: delete leater */
       }

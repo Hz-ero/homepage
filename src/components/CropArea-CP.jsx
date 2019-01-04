@@ -6,6 +6,7 @@ const CropArea_CP = props => {
   const {
     cropState,
     iconColor,
+    radioSelected,
     wantResizeing,
     wantDragStart,
     wantDragging,
@@ -64,7 +65,9 @@ const CropArea_CP = props => {
   return (
     <div
       style={{ backgroundColor: iconColor }}
-      className={Style.cropWrapperBox}
+      className={
+        radioSelected === 0 ? Style.cropWrapperWithImg : Style.cropWrapper
+      }
       onMouseMove={e => handleResizeing(e)}
       onWheel={e => handleWheelZoom(e)}
     >

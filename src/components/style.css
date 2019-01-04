@@ -30,11 +30,18 @@
 }
 
 /* -------------------------------------- */
-.cropWrapperBox {
+.cropWrapper {
   height: 310px;
   width: 310px;
   background-color: aqua;
   position: relative;
+}
+
+.cropWrapperWithImg {
+  composes: cropWrapper;
+  background-image: url(/images/transparent.png);
+  background-repeat: repeat;
+  background-size: 7px;
 }
 
 .showImageBox {
@@ -298,6 +305,12 @@
   width: 96px;
   border-radius: 6px;
 }
+.siteIconWithImg {
+  composes: siteIcon;
+  background-image: url(/images/transparent.png);
+  background-repeat: repeat;
+  background-size: 7px;
+}
 .resultImg {
   height: 100%;
   width: 100%;
@@ -379,11 +392,16 @@
   border: transparent 2px solid;
   border-radius: 50%;
   background-clip: content-box;
-  background-size: 35%;
 }
 
 .radioItem:hover {
   transform: scale(1.1);
+}
+
+.colorRadios .radioItem:first-child {
+  background-image: url(/images/transparent.png);
+  background-size: 35%;
+  background-repeat: repeat;
 }
 
 .colorRadios .radioItem:last-child {
