@@ -23,7 +23,8 @@ const RightSider_CP = props => {
     wantSubmitSiteForm,
     wantSetImgData,
     wantOpenImageCrop,
-    wantCloseRightDrawer
+    wantCloseRightDrawer,
+    wantResetImgCrop
   } = props;
 
   const handleCloseColorPicker = e => {
@@ -52,7 +53,10 @@ const RightSider_CP = props => {
     };
     wantSubmitSiteForm(newSiteInfo);
   };
-
+  const handleResetImgCrop = e => {
+    e.preventDefault();
+    wantResetImgCrop();
+  };
   const handleImgInputChanged = e => {
     e.preventDefault();
     let imgFile = e.target.files[0];
@@ -67,6 +71,14 @@ const RightSider_CP = props => {
   };
   const handleClickImgInput = e => {
     e.stopPropagation();
+  };
+  const handleCallFileInput = e => {
+    let fileInput = document.getElementById("imgInput");
+    fileInput.click();
+  };
+  const handleEditImage = e => {
+    e.preventDefault();
+    wantOpenImageCrop();
   };
   return (
     <div onClick={e => handleCloseColorPicker(e)}>
@@ -116,8 +128,34 @@ const RightSider_CP = props => {
                   <img src={cropState.newImgData} className={Style.resultImg} />
                 </div>
                 <div className={Style.fileInputBox}>
-                  <span className={Style.fileInputBtn}>选择图标</span>
-                  {/* -------------test------------ */}
+                  <div
+                    style={{
+                      display: cropState.newImgData !== null ? "none" : "block"
+                    }}
+                    onClick={e => handleCallFileInput(e)}
+                    className={Style.fileInputBtn}
+                  >
+                    选择图标
+                  </div>
+                  <div
+                    onClick={e => handleEditImage(e)}
+                    style={{
+                      display: cropState.newImgData !== null ? "block" : "none"
+                    }}
+                    className={Style.fileInputBtn}
+                  >
+                    编辑图标
+                  </div>
+                  <div
+                    onClick={e => handleResetImgCrop(e)}
+                    style={{
+                      display: cropState.newImgData !== null ? "block" : "none"
+                    }}
+                    className={Style.fileInputBtn}
+                  >
+                    删除图标
+                  </div>
+                  {/* -------------输入框------------ */}
                   <input
                     id="imgInput"
                     className={Style.fileInput}

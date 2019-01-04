@@ -11,7 +11,8 @@ const initState = {
   zoomPosition: {
     top: 0,
     left: 0,
-    length: 310
+    height: 310,
+    width: 310
   },
   direction: "",
   resizeFlag: false,
@@ -22,7 +23,48 @@ const initState = {
   refImgData: null,
   newImgData: null
 };
-const resetImgCrop = (state, action) => {
+const switchImageCrop = (state, action) => {
+  if (action.payload.imageCropSignal === true) {
+    // 返回新state
+    return Object.assign({}, state, {
+      imageCropSignal: action.payload.imageCropSignal
+    });
+  } else {
+    return initState;
+  }
+};
+const switchResizeFlag = (state, action) => {
+  // 返回新state
+  return Object.assign({}, state, {
+    resizeFlag: action.payload.resizeFlag
+  });
+};
+const switchDragFlag = (state, action) => {
+  // 返回新state
+  return Object.assign({}, state, {
+    dragFlag: action.payload.dragFlag
+  });
+};
+const dragStart = (state, action) => {
+  // 返回新state
+  return Object.assign({}, state, {
+    refPosition: action.payload.refPosition
+  });
+};
+const resizeStart = (state, action) => {
+  // 返回新state
+  return Object.assign({}, state, {
+    direction: action.payload.direction,
+    refPosition: action.payload.refPosition
+  });
+};
+const setImgData = (state, action) => {
+  // 返回新state
+  return Object.assign({}, state, {
+    refImgData: action.payload.refImgData
+  });
+};
+const resetCropBox = (state, action) => {
   let newState = _object.omit(initState, [
     "refImgData",
     "newImgData",
@@ -30,46 +72,87 @@ const resetImgCrop = (state, action) => {
     "refImgSize"
   ]);
 
+  // 返回新state
   return Object.assign({}, state, newState);
 };
-const switchImageCrop = (state, action) => {
+const resetImgCrop = () => {
+  return initState;
+};
+const finishCrop = (state, action) => {
+  let newState = _object.omit(initState, [
+    "zoomPosition",
+    "refImgData",
+    "newImgData",
+    "refImgSize"
+  ]);
+
+  // 返回新state
+  return Object.assign({}, state, newState);
+};
+/*********
+ * 获取图片真实尺寸,设置显示框中的居中缩放
+ */
+const setRefImgSize = (state, action) => {
+  let refImgSize = action.payload.refImgSize;
+  let zoomHeight, zoomWidth, zoomTop, zoomLeft;
+  if (refImgSize.height >= refImgSize.width) {
+    zoomHeight = 310;
+    zoomWidth = (310 * refImgSize.width) / refImgSize.height;
+    zoomTop = 0;
+    zoomLeft = (310 - zoomWidth) / 2;
+  } else {
+    zoomWidth = 310;
+    zoomHeight = (310 * refImgSize.height) / refImgSize.width;
+    zoomLeft = 0;
+    zoomTop = (310 - zoomHeight) / 2;
+  }
+  // 返回新state
   return Object.assign({}, state, {
-    imageCropSignal: action.payload.imageCropSignal
+    zoomPosition: {
+      top: zoomTop,
+      left: zoomLeft,
+      height: zoomHeight,
+      width: zoomWidth
+    },
+    refImgSize: refImgSize
   });
 };
-const switchResizeFlag = (state, action) => {
+
+/**
+ * 缩放图像装载框
+ */
+const imageSizeZoom = (state, action) => {
+  let zoomPosition = state.zoomPosition;
+  let multiValue = action.payload.multiValue;
+  let newHeight = zoomPosition.height * multiValue;
+  let newWidth = zoomPosition.width * multiValue;
+
+  let newTop = zoomPosition.top + (zoomPosition.height - newHeight) / 2;
+  let newLeft = zoomPosition.left + (zoomPosition.width - newWidth) / 2;
+
+  // 返回新state
   return Object.assign({}, state, {
-    resizeFlag: action.payload.resizeFlag
+    zoomPosition: {
+      top: newTop,
+      left: newLeft,
+      height: newHeight,
+      width: newWidth
+    }
   });
 };
-const switchDragFlag = (state, action) => {
-  return Object.assign({}, state, {
-    dragFlag: action.payload.dragFlag
-  });
-};
-const dragStart = (state, action) => {
-  return Object.assign({}, state, {
-    refPosition: action.payload.refPosition
-  });
-};
-const resizeStart = (state, action) => {
-  return Object.assign({}, state, {
-    direction: action.payload.direction,
-    refPosition: action.payload.refPosition
-  });
-};
+/**
+ * 拖拽：1.拖拽剪裁框 2.拖拽图像显示框 3.拖拽新剪裁框
+ */
 const dragging = (state, action) => {
-  let deltaX, deltaY;
-  let newPosition = action.payload.newPosition;
-  deltaX = newPosition.x - state.refPosition.x;
-  deltaY = newPosition.y - state.refPosition.y;
-
-  let newTop = state.resizePosition.top + deltaY;
-  let newLeft = state.resizePosition.left + deltaX;
-  let newLength = state.resizePosition.length;
-
-  return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
+  if (compare(state.resizePosition, initState.resizePosition)) {
+    return dragRefImgBox(state, action);
+  } else {
+    return dragResizeBox(state, action);
+  }
 };
+/**
+ * 调整剪裁框大小
+ */
 const resizeing = (state, action) => {
   let deltaX, deltaY;
   let newPosition = action.payload.newPosition;
@@ -96,55 +179,45 @@ const resizeing = (state, action) => {
       return resizeCropperFromNW(state, deltaX, deltaY, newPosition);
   }
 };
-const imageSizeZoom = (state, action) => {
-  let oldPosition = state.zoomPosition;
-  let newLength = oldPosition.length * action.payload.multiValue;
-  let newTop = oldPosition.top + (oldPosition.length - newLength) / 2;
-  let newLeft = newTop;
-
-  return Object.assign({}, state, {
-    zoomPosition: { top: newTop, left: newLeft, length: newLength }
-  });
-};
-const setImgData = (state, action) => {
-  return Object.assign({}, state, {
-    refImgData: action.payload.refImgData
-  });
-};
+/**
+ * 图像剪裁
+ */
 const cropImage = (state, action) => {
+  // 生成一个Canvas
   let _cropCanvas = document.createElement("canvas");
   _cropCanvas.height = 96;
   _cropCanvas.width = 96;
 
-  let multiValue = state.refImgSize.height / 310;
-  let sx = (state.resizePosition.left - state.zoomPosition.left) * multiValue;
-  let sy = (state.resizePosition.top - state.zoomPosition.top) * multiValue;
-  let sLength = state.resizePosition.length * multiValue;
+  // 计算Canvas所需参数
+  let multiForImgSize, nultiForBoxSize;
+  if (state.refImgSize.height >= state.refImgSize.width) {
+    multiForImgSize = state.refImgSize.height / 310;
+    nultiForBoxSize = state.zoomPosition.height / 310;
+  } else {
+    multiForImgSize = state.refImgSize.width / 310;
+    nultiForBoxSize = state.zoomPosition.width / 310;
+  }
+  let sx =
+    (state.resizePosition.left - state.zoomPosition.left) * multiForImgSize;
+  let sy =
+    (state.resizePosition.top - state.zoomPosition.top) * multiForImgSize;
+  let sLength =
+    (state.resizePosition.length * multiForImgSize) / nultiForBoxSize;
 
+  // 绘制Canvas
   _cropCanvas
     .getContext("2d")
     .drawImage(userImage, sx, sy, sLength, sLength, 0, 0, 96, 96);
-  // 保存图片信息
+  // Canvas转成图片信息
   let _newImgData = _cropCanvas.toDataURL("image/png");
 
+  // 返回新state
   return Object.assign({}, state, {
     newImgData: _newImgData
   });
 };
-const finishCrop = (state, action) => {
-  let newState = _object.omit(initState, [
-    "refImgData",
-    "newImgData",
-    "refImgSize"
-  ]);
 
-  return Object.assign({}, state, newState);
-};
-const setRefImgSize = (state, action) => {
-  return Object.assign({}, state, {
-    refImgSize: action.payload.refImgSize
-  });
-};
+//------------定义reducer：cropModel------------------------
 const cropModel = createReducer()
   .when(Types.SWITCH_IMAGE_CROP, switchImageCrop)
   .when(Types.SWITCH_RESIZE_FLAG, switchResizeFlag)
@@ -158,6 +231,7 @@ const cropModel = createReducer()
   .when(Types.CROP_IMAGE, cropImage)
   .when(Types.FINISH_CROP, finishCrop)
   .when(Types.SET_REF_IMG_SIZE, setRefImgSize)
+  .when(Types.RESET_CROP_BOX, resetCropBox)
   .when(Types.RESET_IMG_CROP, resetImgCrop)
   .build(initState);
 
@@ -169,6 +243,7 @@ const setNewResizeState = (state, newTop, newLeft, newLength, newPosition) => {
   let newBorderY = newTop + newLength;
 
   if (newTop >= 0 && newLeft >= 0 && newBorderX <= 310 && newBorderY <= 310) {
+    // 返回新state
     return Object.assign({}, state, {
       resizePosition: {
         top: newTop,
@@ -239,3 +314,57 @@ const resizeCropperFromSW = (state, deltaX, deltaY, newPosition) => {
   return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
 };
 //------------------------------------
+
+//---比较两个对象深度相等----
+const compare = (origin, target) => {
+  if (typeof target === "object") {
+    if (typeof origin !== "object") return false;
+    for (let key of Object.keys(target))
+      if (!compare(origin[key], target[key])) return false;
+    return true;
+  } else return origin === target;
+};
+//--------------------------
+const dragResizeBox = (state, action) => {
+  let deltaX, deltaY;
+  let newPosition = action.payload.newPosition;
+  deltaX = newPosition.x - state.refPosition.x;
+  deltaY = newPosition.y - state.refPosition.y;
+
+  let newTop = state.resizePosition.top + deltaY;
+  let newLeft = state.resizePosition.left + deltaX;
+  let newLength = state.resizePosition.length;
+
+  let newBorderX = newLeft + newLength;
+  let newBorderY = newTop + newLength;
+
+  if (newBorderX > 310 || newBorderY > 310) {
+    return state;
+  } else {
+    return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
+  }
+};
+//--------------------------
+const dragRefImgBox = (state, action) => {
+  let deltaX, deltaY;
+  let newPosition = action.payload.newPosition;
+  deltaX = newPosition.x - state.refPosition.x;
+  deltaY = newPosition.y - state.refPosition.y;
+
+  let newTop = state.zoomPosition.top + deltaY;
+  let newLeft = state.zoomPosition.left + deltaX;
+  let newHeight = state.zoomPosition.height;
+  let newWidth = state.zoomPosition.width;
+
+  // 返回新state
+  return Object.assign({}, state, {
+    zoomPosition: {
+      top: newTop,
+      left: newLeft,
+      height: newHeight,
+      width: newWidth
+    },
+    refPosition: newPosition
+  });
+};
+//--------------------------

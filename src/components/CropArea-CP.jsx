@@ -73,8 +73,8 @@ const CropArea_CP = props => {
           style={{
             top: cropState.zoomPosition.top,
             left: cropState.zoomPosition.left,
-            height: cropState.zoomPosition.length,
-            width: cropState.zoomPosition.length
+            height: cropState.zoomPosition.height,
+            width: cropState.zoomPosition.width
           }}
           className={Style.zoomImageBox}
         >

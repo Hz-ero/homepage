@@ -16,10 +16,10 @@ const ImageCrop_CP = props => {
     cropState,
     iconColor,
     wantCloseColorPicker,
-    wantCloseImageCrop,
+    wantFinishImageCrop,
     wantCropImage,
     wantResizeEnd,
-    wantResetImgCrop,
+    wantResetCropBox,
     wantZoomImg
   } = props;
   const handleCloseColorPicker = e => {
@@ -29,15 +29,15 @@ const ImageCrop_CP = props => {
   const handleCompleteCrop = e => {
     e.preventDefault();
     wantCropImage();
-    wantCloseImageCrop();
+    wantFinishImageCrop();
   };
   const handleResizeEnd = e => {
     e.preventDefault();
     wantResizeEnd();
   };
-  const handleResetImgCrop = e => {
+  const handleResetCropBox = e => {
     e.preventDefault();
-    wantResetImgCrop();
+    wantResetCropBox();
   };
   const handleZoomInImg = e => {
     e.preventDefault();
@@ -99,7 +99,7 @@ const ImageCrop_CP = props => {
             size="small"
             variant="contained"
             className={Style.singleButton}
-            onClick={e => handleResetImgCrop(e)}
+            onClick={e => handleResetCropBox(e)}
           >
             {/* <Cached /> */}
           </Button>

@@ -14,7 +14,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   wantCloseColorPicker: () => {
     dispatch(Actions.switchColorPicker(false));
   },
-  wantCloseImageCrop: () => {
+  wantFinishImageCrop: () => {
     dispatch(Actions.finishCrop());
   },
   wantResizeEnd: () => {
@@ -27,8 +27,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(Actions.imageSizeZoom(multiValue));
     dispatch(Actions.cropImage());
   },
-  wantResetImgCrop: () => {
-    dispatch(Actions.resetImgCrop());
+  wantResetCropBox: () => {
+    dispatch(Actions.resetCropBox());
     dispatch(Actions.cropImage());
   }
 });

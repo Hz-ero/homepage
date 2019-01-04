@@ -40,7 +40,7 @@ const switchRightDrawer = (state, action) => {
       rightDrawerSignel: signal
     });
   } else {
-    return Object.assign({}, state, initState);
+    return initState;
   }
 };
 

@@ -32,6 +32,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantCloseRightDrawer: () => {
     dispatch(Actions.switchRightDrawer(false));
+    dispatch(Actions.resetColorPicker());
+    dispatch(Actions.switchImageCrop(false));
+  },
+  wantResetImgCrop: () => {
+    dispatch(Actions.resetImgCrop());
   }
 });
 

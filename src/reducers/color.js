@@ -27,23 +27,21 @@ const switchColorPicker = (state, action) => {
     pickerSignal: action.payload.pickerSignal
   });
 };
-
+const resetColorPicker = () => {
+  return initState;
+};
 const setOuterNode = (state, action) => {
   return Object.assign({}, state, {
     outerNode: action.payload.outerNode
   });
 };
 
-const resetColorPicker = () => {
-  return initState;
-};
-
 const color = createReducer()
   .when(Types.SELECT_RADIO, logSelectIndex)
   .when(Types.PICK_ONE_COLOR, setColorSelected)
   .when(Types.SWITCH_COLOR_PICKER, switchColorPicker)
-  .when(Types.SET_OUTER_NODE, setOuterNode)
   .when(Types.RESET_COLOR_PICKER, resetColorPicker)
+  .when(Types.SET_OUTER_NODE, setOuterNode)
   .build(initState);
 
 export default color;

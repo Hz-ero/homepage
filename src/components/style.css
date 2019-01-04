@@ -75,7 +75,7 @@
   width: 100%;
   border: 0 dashed #eeeeee;
   border-width: 1px 0;
-  opacity: 0.5;
+  opacity: 0.75;
 }
 
 .verticalSignBox {
@@ -86,7 +86,7 @@
   width: 33.33333%;
   border: 0 dashed #eeeeee;
   border-width: 0 1px;
-  opacity: 0.5;
+  opacity: 0.75;
 }
 
 .cropperCenter {
@@ -125,7 +125,7 @@
   display: block;
   height: 100%;
   width: 100%;
-  opacity: 0.1;
+  opacity: 0.2;
 }
 .cropperLineN {
   composes: cropper-line;
@@ -355,23 +355,20 @@
 
 .fileInputBox {
   margin-left: 15px;
-  position: relative;
-  overflow: hidden;
-  padding: 8px;
 }
 .fileInputBtn {
+  padding: 4px 6px;
   color: #3f51b5;
+  cursor: pointer;
 }
-.fileInputBox:hover {
+.fileInputBtn:hover {
   background-color: rgba(63, 81, 181, 0.08);
 }
-
 .fileInput {
-  position: absolute;
-  right: 0;
-  top: 0;
-  opacity: 0;
+  display: none;
 }
+
+/* ------------ */
 
 .radioItem {
   height: 18px;

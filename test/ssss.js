@@ -1,6 +1,4 @@
 const _object = require("lodash/object");
-import * as types from "../src/actions/actionTypes";
-types;
 const initState = {
   resizePosition: {
     top: 0,
@@ -21,5 +19,23 @@ const initState = {
   newImgData: null
 };
 
-let newState = _object.omit(initState, ["refImgData", "newImgData"]);
-newState;
+let newState = {
+  resizePosition: {
+    top: 0,
+    left: 0,
+    length: 310
+  }
+};
+let x;
+const compare = (origin, target) => {
+  if (typeof target === "object") {
+    if (typeof origin !== "object") return false;
+    for (let key of Object.keys(target))
+      if (!compare(origin[key], target[key])) return false;
+    return true;
+  } else return origin === target;
+};
+if (compare(newState.resizePosition, initState.resizePosition)) {
+  x = true;
+}
+x;

@@ -20,8 +20,8 @@ export const pickOneColor = createAction(Types.PICK_ONE_COLOR, color => ({
 export const setOuterNode = createAction(Types.SET_OUTER_NODE, outerNode => ({
   outerNode
 }));
-
 export const resetColorPicker = createAction(Types.RESET_COLOR_PICKER);
+
 // ======================================
 export const previewIcon = createAction(Types.PREVIEW_ICON, iconAdr => ({
   iconAdr
@@ -110,10 +110,12 @@ export const setImgData = createAction(Types.SET_IMG_DATA, refImgData => ({
 }));
 export const cropImage = createAction(Types.CROP_IMAGE);
 export const finishCrop = createAction(Types.FINISH_CROP);
+export const cleanImgCrop = createAction(Types.CLEAN_IMG_CROP);
 export const setRefImgSize = createAction(
   Types.SET_REF_IMG_SIZE,
   refImgSize => ({
     refImgSize
   })
 );
+export const resetCropBox = createAction(Types.RESET_CROP_BOX);
 export const resetImgCrop = createAction(Types.RESET_IMG_CROP);
