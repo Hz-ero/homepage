@@ -119,7 +119,7 @@ const rotateImg = (state, action) => {
   }
 
   // 计算承载框新坐标
-  let newLoadP = computeNewLoadPosition(state.rotatePosition);
+  let newLoadP = computeNewLoadPosition(state.rotatePosition, newRotateN);
 
   // 返回新state
   return Object.assign({}, state, {
@@ -131,16 +131,21 @@ const rotateImg = (state, action) => {
 /*************
  * 计算承载框新坐标
  */
-const computeNewLoadPosition = loadP => {
+const computeNewLoadPosition = (loadP, rotateN) => {
+  if (rotateN === 0) {
+    return loadP;
+  }
   // 转换坐标系
   let transX = loadP.left + loadP.width / 2;
   let transY = loadP.top + loadP.height / 2;
-
-  // 调换长和宽数值
-  let _w = loadP.height;
-  let _h = loadP.width;
-  loadP.width = _w;
-  loadP.height = _h;
+  let _w, _h;
+  for (let i = 0; i < rotateN; i++) {
+    // 调换长和宽数值
+    _w = loadP.height;
+    _h = loadP.width;
+    loadP.width = _w;
+    loadP.height = _h;
+  }
 
   loadP.left = transX - loadP.width / 2;
   loadP.top = transY - loadP.height / 2;
