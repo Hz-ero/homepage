@@ -3,6 +3,7 @@ var OpenBrowserPlugin = require("open-browser-webpack-plugin");
 const path = require("path");
 
 module.exports = {
+  devtool: "source-map",
   entry: ["babel-polyfill", "./src/index.js"],
   output: {
     filename: "main.js",

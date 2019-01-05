@@ -38,4 +38,6 @@ const compare = (origin, target) => {
 if (compare(newState.resizePosition, initState.resizePosition)) {
   x = true;
 }
-x;
+let m = -9 % 4;
+m = m + 4;
+m;

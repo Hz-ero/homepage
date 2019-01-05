@@ -14,6 +14,8 @@ const initState = {
     height: 310,
     width: 310
   },
+  rotatePosition: null,
+  rotateN: 0,
   direction: "",
   resizeFlag: false,
   dragFlag: false,
@@ -51,6 +53,19 @@ const dragStart = (state, action) => {
     refPosition: action.payload.refPosition
   });
 };
+const copyZoomPosition = (state, action) => {
+  let _position = {
+    top: state.zoomPosition.top,
+    left: state.zoomPosition.left,
+    height: state.zoomPosition.height,
+    width: state.zoomPosition.width
+  };
+  // 返回新state
+  return Object.assign({}, state, {
+    rotatePosition: _position
+  });
+};
+
 const resizeStart = (state, action) => {
   // 返回新state
   return Object.assign({}, state, {
@@ -88,6 +103,48 @@ const finishCrop = (state, action) => {
 
   // 返回新state
   return Object.assign({}, state, newState);
+};
+
+/*******************
+ * 由旋转角度，重新计算承载框的坐标
+ */
+const rotateImg = (state, action) => {
+  // 旋转次数（一次90deg）
+  let newRotateN = state.rotateN + action.payload.rotateNumber;
+  // 旋转以4次为一个周期，对转数除4求余
+  newRotateN = newRotateN % 4;
+  // 若为负数则+4转正
+  if (newRotateN < 0) {
+    newRotateN = newRotateN + 4;
+  }
+
+  // 计算承载框新坐标
+  let newLoadP = computeNewLoadPosition(state.rotatePosition);
+
+  // 返回新state
+  return Object.assign({}, state, {
+    rotatePosition: newLoadP,
+    rotateN: newRotateN
+  });
+};
+
+/*************
+ * 计算承载框新坐标
+ */
+const computeNewLoadPosition = loadP => {
+  // 转换坐标系
+  let transX = loadP.left + loadP.width / 2;
+  let transY = loadP.top + loadP.height / 2;
+
+  // 调换长和宽数值
+  let _w = loadP.height;
+  let _h = loadP.width;
+  loadP.width = _w;
+  loadP.height = _h;
+
+  loadP.left = transX - loadP.width / 2;
+  loadP.top = transY - loadP.height / 2;
+  return loadP;
 };
 /*********
  * 获取图片真实尺寸,设置显示框中的居中缩放
@@ -183,6 +240,12 @@ const resizeing = (state, action) => {
  * 图像剪裁
  */
 const cropImage = (state, action) => {
+  let rotatePosition;
+  if (state.rotatePosition === null) {
+    rotatePosition = state.zoomPosition;
+  } else {
+    rotatePosition = state.rotatePosition;
+  }
   // 生成一个Canvas
   let _cropCanvas = document.createElement("canvas");
   _cropCanvas.height = 96;
@@ -192,15 +255,13 @@ const cropImage = (state, action) => {
   let multiForImgSize, nultiForBoxSize;
   if (state.refImgSize.height >= state.refImgSize.width) {
     multiForImgSize = state.refImgSize.height / 310;
-    nultiForBoxSize = state.zoomPosition.height / 310;
+    nultiForBoxSize = rotatePosition.height / 310;
   } else {
     multiForImgSize = state.refImgSize.width / 310;
-    nultiForBoxSize = state.zoomPosition.width / 310;
+    nultiForBoxSize = rotatePosition.width / 310;
   }
-  let sx =
-    (state.resizePosition.left - state.zoomPosition.left) * multiForImgSize;
-  let sy =
-    (state.resizePosition.top - state.zoomPosition.top) * multiForImgSize;
+  let sx = (state.resizePosition.left - rotatePosition.left) * multiForImgSize;
+  let sy = (state.resizePosition.top - rotatePosition.top) * multiForImgSize;
   let sLength =
     (state.resizePosition.length * multiForImgSize) / nultiForBoxSize;
 
@@ -233,6 +294,8 @@ const cropModel = createReducer()
   .when(Types.SET_REF_IMG_SIZE, setRefImgSize)
   .when(Types.RESET_CROP_BOX, resetCropBox)
   .when(Types.RESET_IMG_CROP, resetImgCrop)
+  .when(Types.ROTATE_IMG, rotateImg)
+  .when(Types.COPY_ZOOM_POSITION, copyZoomPosition)
   .build(initState);
 
 export default cropModel;

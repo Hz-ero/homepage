@@ -14,7 +14,8 @@ const CropArea_CP = props => {
     wantZoomImg,
     wantSetRefImgSize
   } = props;
-
+  let rotateDeg = cropState.rotateN * 90;
+  let imgRotate = "rotate(" + rotateDeg.toString() + "deg)";
   const handleResizeing = e => {
     e.preventDefault();
     e.stopPropagation();
@@ -86,6 +87,7 @@ const CropArea_CP = props => {
             src={cropState.refImgData}
             alt="img"
             className={Style.userImage}
+            style={{ transform: imgRotate }}
             onLoad={e => handleUserImgLoad(e)}
           />
         </div>

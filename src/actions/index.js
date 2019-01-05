@@ -119,3 +119,7 @@ export const setRefImgSize = createAction(
 );
 export const resetCropBox = createAction(Types.RESET_CROP_BOX);
 export const resetImgCrop = createAction(Types.RESET_IMG_CROP);
+export const rotateImg = createAction(Types.ROTATE_IMG, rotateNumber => ({
+  rotateNumber
+}));
+export const copyZoomPosition = createAction(Types.COPY_ZOOM_POSITION);

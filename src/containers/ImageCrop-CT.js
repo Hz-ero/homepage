@@ -30,6 +30,11 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   wantResetCropBox: () => {
     dispatch(Actions.resetCropBox());
     dispatch(Actions.cropImage());
+  },
+  wantRotateImg: rotateNumber => {
+    dispatch(Actions.copyZoomPosition());
+    dispatch(Actions.rotateImg(rotateNumber));
+    dispatch(Actions.cropImage());
   }
 });
 

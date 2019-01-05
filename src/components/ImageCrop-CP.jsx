@@ -20,6 +20,7 @@ const ImageCrop_CP = props => {
     wantCropImage,
     wantResizeEnd,
     wantResetCropBox,
+    wantRotateImg,
     wantZoomImg
   } = props;
   const handleCloseColorPicker = e => {
@@ -47,6 +48,10 @@ const ImageCrop_CP = props => {
     e.preventDefault();
     wantZoomImg(0.85);
   };
+  const handleRotateImg = (e, number) => {
+    e.preventDefault();
+    wantRotateImg(number);
+  };
   return (
     <div
       onMouseUp={e => handleResizeEnd(e)}
@@ -66,6 +71,7 @@ const ImageCrop_CP = props => {
               size="small"
               variant="contained"
               className={Style.leftButton}
+              onClick={(e, number) => handleRotateImg(e, -1)}
             >
               {/* <RotateLeft /> */}
             </Button>
@@ -73,6 +79,7 @@ const ImageCrop_CP = props => {
               size="small"
               variant="contained"
               className={Style.rightButton}
+              onClick={(e, number) => handleRotateImg(e, 1)}
             >
               {/* <RotateRight /> */}
             </Button>
