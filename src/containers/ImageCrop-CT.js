@@ -32,7 +32,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(Actions.cropImage());
   },
   wantRotateImg: rotateNumber => {
-    dispatch(Actions.copyZoomPosition());
+    // dispatch(Actions.copyZoomPosition());
     dispatch(Actions.rotateImg(rotateNumber));
     dispatch(Actions.cropImage());
   }

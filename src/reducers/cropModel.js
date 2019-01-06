@@ -53,18 +53,18 @@ const dragStart = (state, action) => {
     refPosition: action.payload.refPosition
   });
 };
-const copyZoomPosition = (state, action) => {
-  let _position = {
-    top: state.zoomPosition.top,
-    left: state.zoomPosition.left,
-    height: state.zoomPosition.height,
-    width: state.zoomPosition.width
-  };
-  // 返回新state
-  return Object.assign({}, state, {
-    rotatePosition: _position
-  });
-};
+// const copyZoomPosition = (state, action) => {
+//   let _position = {
+//     top: state.zoomPosition.top,
+//     left: state.zoomPosition.left,
+//     height: state.zoomPosition.height,
+//     width: state.zoomPosition.width
+//   };
+//   // 返回新state
+//   return Object.assign({}, state, {
+//     rotatePosition: _position
+//   });
+// };
 
 const resizeStart = (state, action) => {
   // 返回新state
@@ -104,9 +104,14 @@ const finishCrop = (state, action) => {
   // 返回新state
   return Object.assign({}, state, newState);
 };
+//
+//
+//
+//
+const someFunc = (state, action) => {};
 
 /*******************
- * 由旋转角度，重新计算承载框的坐标
+ * 旋转次数（一次90deg）
  */
 const rotateImg = (state, action) => {
   // 旋转次数（一次90deg）
@@ -118,12 +123,8 @@ const rotateImg = (state, action) => {
     newRotateN = newRotateN + 4;
   }
 
-  // 计算承载框新坐标
-  let newLoadP = computeNewLoadPosition(state.rotatePosition, newRotateN);
-
   // 返回新state
   return Object.assign({}, state, {
-    rotatePosition: newLoadP,
     rotateN: newRotateN
   });
 };
@@ -131,7 +132,7 @@ const rotateImg = (state, action) => {
 /*************
  * 计算承载框新坐标
  */
-const computeNewLoadPosition = (loadP, rotateN) => {
+const computeRotatePosition = (loadP, rotateN) => {
   if (rotateN === 0) {
     return loadP;
   }
@@ -246,43 +247,98 @@ const resizeing = (state, action) => {
  */
 const cropImage = (state, action) => {
   let rotatePosition;
-  if (state.rotatePosition === null) {
-    rotatePosition = state.zoomPosition;
-  } else {
-    rotatePosition = state.rotatePosition;
-  }
-  // 生成一个Canvas
-  let _cropCanvas = document.createElement("canvas");
-  _cropCanvas.height = 96;
-  _cropCanvas.width = 96;
+  let _position = {
+    top: state.zoomPosition.top,
+    left: state.zoomPosition.left,
+    height: state.zoomPosition.height,
+    width: state.zoomPosition.width
+  };
+  rotatePosition = computeRotatePosition(_position, state.rotateN);
 
   // 计算Canvas所需参数
-  let multiForImgSize, nultiForBoxSize;
+  let multiForImgSize, multiForBoxSize;
   if (state.refImgSize.height >= state.refImgSize.width) {
     multiForImgSize = state.refImgSize.height / 310;
-    nultiForBoxSize = rotatePosition.height / 310;
+    multiForBoxSize = rotatePosition.height / 310;
   } else {
     multiForImgSize = state.refImgSize.width / 310;
-    nultiForBoxSize = rotatePosition.width / 310;
+    multiForBoxSize = rotatePosition.width / 310;
   }
   let sx = (state.resizePosition.left - rotatePosition.left) * multiForImgSize;
   let sy = (state.resizePosition.top - rotatePosition.top) * multiForImgSize;
   let sLength =
-    (state.resizePosition.length * multiForImgSize) / nultiForBoxSize;
+    (state.resizePosition.length * multiForImgSize) / multiForBoxSize;
+  // 用户图像
+  let userImage = new Image();
+  userImage.src = state.refImgData;
 
+  //-----------------------------------------//
+  //-----------------------------------------//
+  let _width = state.refImgSize.width;
+  let _height = state.refImgSize.height;
+  let _rotateN = state.rotateN;
+  let _coordArr = [0, _width, _height, 0, 0];
+  for (let i = 0; i < _rotateN; i++) {
+    _coordArr[0] = _coordArr[4];
+    _coordArr[4] = _coordArr[3];
+    _coordArr[3] = _coordArr[2];
+    _coordArr[2] = _coordArr[1];
+    _coordArr[1] = _coordArr[0];
+    let w = _height;
+    let h = _width;
+    _width = w;
+    _height = h;
+  }
+  let rotateCanvas = document.getElementById("nodisplay");
+  rotateCanvas.height = _height;
+  rotateCanvas.width = _width;
+  let ctx = rotateCanvas.getContext("2d");
+  ctx.translate(_coordArr[3], _coordArr[4]);
+  ctx.rotate((_rotateN * 90 * Math.PI) / 180);
+  ctx.drawImage(userImage, 0, 0);
+  let _userImgData = rotateCanvas.toDataURL("image/png");
+  let noDisImg = document.getElementById("noDisImg");
+  let _userImg = new Image();
+  _userImg.src = _userImgData;
+  noDisImg.src = _userImgData;
+  //-----------------------------------------//
+  //-----------------------------------------//
+
+  // 生成一个Canvas
+  let _cropCanvas = document.getElementById("resultImg");
+  _cropCanvas.height = 96;
+  _cropCanvas.width = 96;
   // 绘制Canvas
   _cropCanvas
     .getContext("2d")
-    .drawImage(userImage, sx, sy, sLength, sLength, 0, 0, 96, 96);
+    .drawImage(_userImg, sx, sy, sLength, sLength, 0, 0, 96, 96);
   // Canvas转成图片信息
   let _newImgData = _cropCanvas.toDataURL("image/png");
+  let resImage = document.getElementById("resImage");
+  resImage.src = _newImgData;
 
   // 返回新state
   return Object.assign({}, state, {
     newImgData: _newImgData
   });
 };
+const computeRotateCanvas = (userImage, width, height, rotateN) => {
+  let _rotateCanvas = document.createElement("canvas");
+  _rotateCanvas.getContext("2d");
+  let _coordArr = [0, width, height, 0, 0];
+  for (let i = 0; i < rotateN; i++) {
+    _coordArr[0] = _coordArr[4];
+    _coordArr[4] = _coordArr[3];
+    _coordArr[3] = _coordArr[2];
+    _coordArr[2] = _coordArr[1];
+    _coordArr[1] = _coordArr[0];
+  }
 
+  _rotateCanvas.translate(_coordArr[3], _coordArr[4]);
+  _rotateCanvas.rotate((rotateN * 90 * Math.PI) / 180);
+  _rotateCanvas.drawImage(userImage, width, height);
+  return _rotateCanvas;
+};
 //------------定义reducer：cropModel------------------------
 const cropModel = createReducer()
   .when(Types.SWITCH_IMAGE_CROP, switchImageCrop)
@@ -300,7 +356,7 @@ const cropModel = createReducer()
   .when(Types.RESET_CROP_BOX, resetCropBox)
   .when(Types.RESET_IMG_CROP, resetImgCrop)
   .when(Types.ROTATE_IMG, rotateImg)
-  .when(Types.COPY_ZOOM_POSITION, copyZoomPosition)
+  // .when(Types.COPY_ZOOM_POSITION, copyZoomPosition)
   .build(initState);
 
 export default cropModel;

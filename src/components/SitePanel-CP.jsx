@@ -20,11 +20,16 @@ const SitePanel_CP = props => {
   };
   return (
     <div onClick={e => handleCloseRightDrawer(e)} className={Style.fullBox}>
-      <div className={Style.sitesPanel}>
+      {/* <div className={Style.sitesPanel}>
         {siteArray.map(item => (
           <SiteItem key={item.id} index={item.id} siteInfo={item.siteInfo} />
         ))}
-      </div>
+      </div> */}
+      <canvas id="resultImg" style={{ display: "none" }} />
+      <img id="resImage" />
+      <canvas id="nodisplay" style={{ display: "none" }} />
+
+      <img id="noDisImg" />
     </div>
   );
 };

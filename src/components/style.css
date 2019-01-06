@@ -4,7 +4,7 @@
   background-color: #353535;
   position: absolute;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   z-index: 0;
 }
