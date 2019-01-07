@@ -126,12 +126,15 @@ const RightSider_CP = props => {
                     radioSelected === 0 ? Style.siteIconWithImg : Style.siteIcon
                   }
                 >
-                  <img src={cropState.newImgData} className={Style.resultImg} />
+                  <img
+                    src={cropState.cropImgData}
+                    className={Style.resultImg}
+                  />
                 </div>
                 <div className={Style.fileInputBox}>
                   <div
                     style={{
-                      display: cropState.newImgData !== null ? "none" : "block"
+                      display: cropState.cropImgData !== null ? "none" : "block"
                     }}
                     onClick={e => handleCallFileInput(e)}
                     className={Style.fileInputBtn}
@@ -141,7 +144,7 @@ const RightSider_CP = props => {
                   <div
                     onClick={e => handleEditImage(e)}
                     style={{
-                      display: cropState.newImgData !== null ? "block" : "none"
+                      display: cropState.cropImgData !== null ? "block" : "none"
                     }}
                     className={Style.fileInputBtn}
                   >
@@ -150,7 +153,7 @@ const RightSider_CP = props => {
                   <div
                     onClick={e => handleResetImgCrop(e)}
                     style={{
-                      display: cropState.newImgData !== null ? "block" : "none"
+                      display: cropState.cropImgData !== null ? "block" : "none"
                     }}
                     className={Style.fileInputBtn}
                   >

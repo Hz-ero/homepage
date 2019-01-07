@@ -23,7 +23,7 @@ const initState = {
   imageCropSignal: false,
   refImgSize: null,
   refImgData: null,
-  newImgData: null
+  cropImgData: null
 };
 const switchImageCrop = (state, action) => {
   if (action.payload.imageCropSignal === true) {
@@ -53,18 +53,6 @@ const dragStart = (state, action) => {
     refPosition: action.payload.refPosition
   });
 };
-// const copyZoomPosition = (state, action) => {
-//   let _position = {
-//     top: state.zoomPosition.top,
-//     left: state.zoomPosition.left,
-//     height: state.zoomPosition.height,
-//     width: state.zoomPosition.width
-//   };
-//   // 返回新state
-//   return Object.assign({}, state, {
-//     rotatePosition: _position
-//   });
-// };
 
 const resizeStart = (state, action) => {
   // 返回新state
@@ -82,7 +70,7 @@ const setImgData = (state, action) => {
 const resetCropBox = (state, action) => {
   let newState = _object.omit(initState, [
     "refImgData",
-    "newImgData",
+    "cropImgData",
     "imageCropSignal",
     "refImgSize"
   ]);
@@ -97,18 +85,13 @@ const finishCrop = (state, action) => {
   let newState = _object.omit(initState, [
     "zoomPosition",
     "refImgData",
-    "newImgData",
+    "cropImgData",
     "refImgSize"
   ]);
 
   // 返回新state
   return Object.assign({}, state, newState);
 };
-//
-//
-//
-//
-const someFunc = (state, action) => {};
 
 /*******************
  * 旋转次数（一次90deg）
@@ -245,100 +228,16 @@ const resizeing = (state, action) => {
 /**
  * 图像剪裁
  */
-const cropImage = (state, action) => {
-  let rotatePosition;
-  let _position = {
-    top: state.zoomPosition.top,
-    left: state.zoomPosition.left,
-    height: state.zoomPosition.height,
-    width: state.zoomPosition.width
-  };
-  rotatePosition = computeRotatePosition(_position, state.rotateN);
-
-  // 计算Canvas所需参数
-  let multiForImgSize, multiForBoxSize;
-  if (state.refImgSize.height >= state.refImgSize.width) {
-    multiForImgSize = state.refImgSize.height / 310;
-    multiForBoxSize = rotatePosition.height / 310;
-  } else {
-    multiForImgSize = state.refImgSize.width / 310;
-    multiForBoxSize = rotatePosition.width / 310;
-  }
-  let sx = (state.resizePosition.left - rotatePosition.left) * multiForImgSize;
-  let sy = (state.resizePosition.top - rotatePosition.top) * multiForImgSize;
-  let sLength =
-    (state.resizePosition.length * multiForImgSize) / multiForBoxSize;
-  // 用户图像
-  let userImage = new Image();
-  userImage.src = state.refImgData;
-
-  //-----------------------------------------//
-  //-----------------------------------------//
-  let _width = state.refImgSize.width;
-  let _height = state.refImgSize.height;
-  let _rotateN = state.rotateN;
-  let _coordArr = [0, _width, _height, 0, 0];
-  for (let i = 0; i < _rotateN; i++) {
-    _coordArr[0] = _coordArr[4];
-    _coordArr[4] = _coordArr[3];
-    _coordArr[3] = _coordArr[2];
-    _coordArr[2] = _coordArr[1];
-    _coordArr[1] = _coordArr[0];
-    let w = _height;
-    let h = _width;
-    _width = w;
-    _height = h;
-  }
-  let rotateCanvas = document.getElementById("nodisplay");
-  rotateCanvas.height = _height;
-  rotateCanvas.width = _width;
-  let ctx = rotateCanvas.getContext("2d");
-  ctx.translate(_coordArr[3], _coordArr[4]);
-  ctx.rotate((_rotateN * 90 * Math.PI) / 180);
-  ctx.drawImage(userImage, 0, 0);
-  let _userImgData = rotateCanvas.toDataURL("image/png");
-  let noDisImg = document.getElementById("noDisImg");
-  let _userImg = new Image();
-  _userImg.src = _userImgData;
-  noDisImg.src = _userImgData;
-  //-----------------------------------------//
-  //-----------------------------------------//
-
-  // 生成一个Canvas
-  let _cropCanvas = document.getElementById("resultImg");
-  _cropCanvas.height = 96;
-  _cropCanvas.width = 96;
-  // 绘制Canvas
-  _cropCanvas
-    .getContext("2d")
-    .drawImage(_userImg, sx, sy, sLength, sLength, 0, 0, 96, 96);
-  // Canvas转成图片信息
-  let _newImgData = _cropCanvas.toDataURL("image/png");
-  let resImage = document.getElementById("resImage");
-  resImage.src = _newImgData;
+const cropImage = state => {
+  let rotateImg = computeRotateImg(state);
+  let cropImgData = computeCropImgData(rotateImg, state);
 
   // 返回新state
   return Object.assign({}, state, {
-    newImgData: _newImgData
+    cropImgData: cropImgData
   });
 };
-const computeRotateCanvas = (userImage, width, height, rotateN) => {
-  let _rotateCanvas = document.createElement("canvas");
-  _rotateCanvas.getContext("2d");
-  let _coordArr = [0, width, height, 0, 0];
-  for (let i = 0; i < rotateN; i++) {
-    _coordArr[0] = _coordArr[4];
-    _coordArr[4] = _coordArr[3];
-    _coordArr[3] = _coordArr[2];
-    _coordArr[2] = _coordArr[1];
-    _coordArr[1] = _coordArr[0];
-  }
 
-  _rotateCanvas.translate(_coordArr[3], _coordArr[4]);
-  _rotateCanvas.rotate((rotateN * 90 * Math.PI) / 180);
-  _rotateCanvas.drawImage(userImage, width, height);
-  return _rotateCanvas;
-};
 //------------定义reducer：cropModel------------------------
 const cropModel = createReducer()
   .when(Types.SWITCH_IMAGE_CROP, switchImageCrop)
@@ -492,3 +391,89 @@ const dragRefImgBox = (state, action) => {
   });
 };
 //--------------------------
+/**
+ * 将当前用户图像通过Canvas计算处旋转后的图像
+ *
+ * @param {*} state
+ */
+const computeRotateImg = state => {
+  //当前用户图像
+  let currentImg = new Image();
+  currentImg.src = state.refImgData;
+  // 旋转后的Canvas
+  let rotateCanvas = document.createElement("canvas");
+  // 旋转后的图像
+  let rotateImg = new Image();
+
+  //计算旋转后的画布尺寸
+  let _width = state.refImgSize.width;
+  let _height = state.refImgSize.height;
+  let _rotateN = state.rotateN;
+  let _coordArr = [0, _width, _height, 0, 0];
+  for (let i = 0; i < _rotateN; i++) {
+    _coordArr[0] = _coordArr[4];
+    _coordArr[4] = _coordArr[3];
+    _coordArr[3] = _coordArr[2];
+    _coordArr[2] = _coordArr[1];
+    _coordArr[1] = _coordArr[0];
+    let w = _height;
+    let h = _width;
+    _width = w;
+    _height = h;
+  }
+  rotateCanvas.height = _height;
+  rotateCanvas.width = _width;
+  let ctx = rotateCanvas.getContext("2d");
+  ctx.translate(_coordArr[3], _coordArr[4]);
+  ctx.rotate((_rotateN * 90 * Math.PI) / 180);
+  ctx.drawImage(currentImg, 0, 0);
+
+  // 讲Canvas转化为图像
+  let rotateImgData = rotateCanvas.toDataURL("image/png");
+  rotateImg.src = rotateImgData;
+
+  return rotateImg;
+};
+
+const computeCropImgData = (rotateImg, state) => {
+  // 生成一个Canvas
+  let cropCanvas = document.createElement("canvas");
+  cropCanvas.height = 96;
+  cropCanvas.width = 96;
+
+  // 计算旋转后的承载框坐标尺寸
+  let rotatePosition;
+  let _position = {
+    top: state.zoomPosition.top,
+    left: state.zoomPosition.left,
+    height: state.zoomPosition.height,
+    width: state.zoomPosition.width
+  };
+  if (state.rotateN % 2 === 0) {
+    rotatePosition = _position;
+  } else {
+    rotatePosition = computeRotatePosition(_position, state.rotateN);
+  }
+
+  // 计算Canvas所需参数
+  let multiForImgSize, multiForBoxSize;
+  if (state.refImgSize.height >= state.refImgSize.width) {
+    multiForImgSize = state.refImgSize.height / 310;
+    multiForBoxSize = state.zoomPosition.height / 310;
+  } else {
+    multiForImgSize = state.refImgSize.width / 310;
+    multiForBoxSize = state.zoomPosition.width / 310;
+  }
+  let sx = (state.resizePosition.left - rotatePosition.left) * multiForImgSize;
+  let sy = (state.resizePosition.top - rotatePosition.top) * multiForImgSize;
+  let sLength =
+    (state.resizePosition.length * multiForImgSize) / multiForBoxSize;
+
+  // 绘制Canvas
+  cropCanvas
+    .getContext("2d")
+    .drawImage(rotateImg, sx, sy, sLength, sLength, 0, 0, 96, 96);
+  // Canvas转成图片信息
+  let cropImgData = cropCanvas.toDataURL("image/png");
+  return cropImgData;
+};
