@@ -58,6 +58,11 @@ export const switchRightDrawer = createAction(
     rightDrawerSignel
   })
 );
+
+export const setSiteFlag = createAction(Types.SET_SITE_FLAG, siteFlag => ({
+  siteFlag
+}));
+
 export const submitSiteForm = createAction(
   Types.SUBMIT_SITE_FORM,
   siteInfo => ({

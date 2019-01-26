@@ -271,6 +271,44 @@
   flex-direction: column;
   align-content: center;
 }
+.iconBox {
+  position: relative;
+}
+.iconBox:hover {
+  cursor: pointer;
+}
+.iconBox:hover .editSiteBox {
+  visibility: visible;
+}
+.editSiteBox {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 96px;
+  width: 96px;
+  background-color: rgba(255, 255, 255, 0.7);
+  visibility: hidden;
+}
+
+.editSiteBtn {
+  height: 64px;
+  width: 64px;
+  margin: auto;
+}
+.deleteBox {
+  cursor: default;
+  padding: 2px;
+  height: 28px;
+  width: 28px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  position: absolute;
+  top: -3%;
+  right: -3%;
+}
 
 .show {
   display: block;
@@ -305,13 +343,22 @@
   width: 96px;
   border-radius: 6px;
 }
+.iconName {
+  font-size: 24px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+}
 .siteIconWithImg {
   composes: siteIcon;
   background-image: url(/images/transparent.png);
   background-repeat: repeat;
   background-size: 7px;
 }
-.resultImg {
+.iconImg {
   height: 100%;
   width: 100%;
 }

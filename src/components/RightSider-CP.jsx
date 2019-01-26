@@ -46,9 +46,11 @@ const RightSider_CP = props => {
     e.preventDefault();
     const newSiteInfo = {
       name: siteForm.name,
+      shortName: siteForm.shortName,
       address: siteForm.address,
-      icon: siteForm.icon,
-      iconColor: iconColor
+      iconData: cropState.cropImgData,
+      iconColor: iconColor,
+      radio: radioSelected
     };
     wantSubmitSiteForm(newSiteInfo);
   };
@@ -97,22 +99,22 @@ const RightSider_CP = props => {
             </Toolbar>
           </AppBar>
           <form encType="mutipart/form-data" className={Style.siteForm}>
-            {/* ------输入标题------- */}
+            {/* ------输入名称------- */}
             <div className={Style.formSection}>
               <TextField
                 className={Style.repeatInput}
                 variant="outlined"
-                label="标题"
+                label="名称"
                 value={siteForm.name}
                 onChange={input => handleNameInput(input)}
               />
             </div>
-            {/* ------输入地址------- */}
+            {/* ------输入网址------- */}
             <div className={Style.formSection}>
               <TextField
                 className={Style.repeatInput}
                 variant="outlined"
-                label="地址"
+                label="网址"
                 value={siteForm.address}
                 onChange={input => handleAddressInput(input)}
               />
@@ -120,17 +122,31 @@ const RightSider_CP = props => {
             {/* ------图标------- */}
             <div className={Style.formSection}>
               <div className={Style.siteIconBox}>
+                {/* ------文字图标框------- */}
                 <div
-                  style={{ backgroundColor: iconColor }}
+                  style={{
+                    backgroundColor: iconColor,
+                    display: cropState.cropImgData === null ? "block" : "none"
+                  }}
                   className={
                     radioSelected === 0 ? Style.siteIconWithImg : Style.siteIcon
                   }
                 >
-                  <img
-                    src={cropState.cropImgData}
-                    className={Style.resultImg}
-                  />
+                  <div className={Style.iconName}>{siteForm.shortName}</div>
                 </div>
+                {/* ------图片图标框------- */}
+                <div
+                  style={{
+                    backgroundColor: iconColor,
+                    display: cropState.cropImgData === null ? "none" : "block"
+                  }}
+                  className={
+                    radioSelected === 0 ? Style.siteIconWithImg : Style.siteIcon
+                  }
+                >
+                  <img src={cropState.cropImgData} className={Style.iconImg} />
+                </div>
+                {/* ------图片操作框------- */}
                 <div className={Style.fileInputBox}>
                   <div
                     style={{

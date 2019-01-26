@@ -15,6 +15,7 @@ const initState = {
     width: 310
   },
   rotatePosition: null,
+  rotateImgData: null,
   rotateN: 0,
   direction: "",
   resizeFlag: false,
@@ -106,35 +107,26 @@ const rotateImg = (state, action) => {
     newRotateN = newRotateN + 4;
   }
 
+  let { zoomPosition } = state;
+  let loadP = {
+    top: zoomPosition.top,
+    left: zoomPosition.left,
+    width: zoomPosition.width,
+    height: zoomPosition.height
+  };
+  let rotatePosition = computeRotatePosition(loadP, newRotateN);
+
+  let { refImgData, refImgSize } = state;
+  let rotateImgData = computeRotateImg(refImgData, refImgSize, newRotateN);
+
   // 返回新state
   return Object.assign({}, state, {
+    rotatePosition: rotatePosition,
+    rotateImgData: rotateImgData,
     rotateN: newRotateN
   });
 };
 
-/*************
- * 计算承载框新坐标
- */
-const computeRotatePosition = (loadP, rotateN) => {
-  if (rotateN === 0) {
-    return loadP;
-  }
-  // 转换坐标系
-  let transX = loadP.left + loadP.width / 2;
-  let transY = loadP.top + loadP.height / 2;
-  let _w, _h;
-  for (let i = 0; i < rotateN; i++) {
-    // 调换长和宽数值
-    _w = loadP.height;
-    _h = loadP.width;
-    loadP.width = _w;
-    loadP.height = _h;
-  }
-
-  loadP.left = transX - loadP.width / 2;
-  loadP.top = transY - loadP.height / 2;
-  return loadP;
-};
 /*********
  * 获取图片真实尺寸,设置显示框中的居中缩放
  */
@@ -168,7 +160,7 @@ const setRefImgSize = (state, action) => {
  * 缩放图像装载框
  */
 const imageSizeZoom = (state, action) => {
-  let zoomPosition = state.zoomPosition;
+  let { zoomPosition } = state;
   let multiValue = action.payload.multiValue;
   let newHeight = zoomPosition.height * multiValue;
   let newWidth = zoomPosition.width * multiValue;
@@ -201,11 +193,12 @@ const dragging = (state, action) => {
  */
 const resizeing = (state, action) => {
   let deltaX, deltaY;
+  let { refPosition, direction } = state;
   let newPosition = action.payload.newPosition;
-  deltaX = newPosition.x - state.refPosition.x;
-  deltaY = newPosition.y - state.refPosition.y;
+  deltaX = newPosition.x - refPosition.x;
+  deltaY = newPosition.y - refPosition.y;
 
-  switch (state.direction) {
+  switch (direction) {
     case "n":
       return resizeCropperFromN(state, deltaX, deltaY, newPosition);
     case "e":
@@ -229,8 +222,35 @@ const resizeing = (state, action) => {
  * 图像剪裁
  */
 const cropImage = state => {
-  let rotateImg = computeRotateImg(state);
-  let cropImgData = computeCropImgData(rotateImg, state);
+  let { rotateImgData, rotatePosition, refImgSize, resizePosition } = state;
+
+  // 旋转后的图像
+  let rotateImg = new Image();
+  rotateImg.src = rotateImgData;
+  // 生成一个Canvas
+  let cropCanvas = document.createElement("canvas");
+  cropCanvas.height = 96;
+  cropCanvas.width = 96;
+
+  // 计算Canvas所需参数
+  let multiForImgSize, multiForBoxSize;
+  if (refImgSize.height >= refImgSize.width) {
+    multiForImgSize = refImgSize.height / 310;
+    multiForBoxSize = rotatePosition.height / 310;
+  } else {
+    multiForImgSize = refImgSize.width / 310;
+    multiForBoxSize = rotatePosition.width / 310;
+  }
+  let sx = (resizePosition.left - rotatePosition.left) * multiForImgSize;
+  let sy = (resizePosition.top - rotatePosition.top) * multiForImgSize;
+  let sLength = (resizePosition.length * multiForImgSize) / multiForBoxSize;
+
+  // 绘制Canvas
+  cropCanvas
+    .getContext("2d")
+    .drawImage(rotateImg, sx, sy, sLength, sLength, 0, 0, 96, 96);
+  // Canvas转成图片信息
+  let cropImgData = cropCanvas.toDataURL("image/png");
 
   // 返回新state
   return Object.assign({}, state, {
@@ -281,58 +301,66 @@ const setNewResizeState = (state, newTop, newLeft, newLength, newPosition) => {
 };
 
 const resizeCropperFromN = (state, deltaX, deltaY, newPosition) => {
-  let newTop = state.resizePosition.top + deltaY;
-  let newLeft = state.resizePosition.left;
-  let newLength = state.resizePosition.length - deltaY;
+  let { resizePosition } = state;
+  let newTop = resizePosition.top + deltaY;
+  let newLeft = resizePosition.left;
+  let newLength = resizePosition.length - deltaY;
 
   return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
 };
 const resizeCropperFromE = (state, deltaX, deltaY, newPosition) => {
-  let newTop = state.resizePosition.top - deltaX / 2;
-  let newLeft = state.resizePosition.left;
-  let newLength = state.resizePosition.length + deltaX;
+  let { resizePosition } = state;
+  let newTop = resizePosition.top - deltaX / 2;
+  let newLeft = resizePosition.left;
+  let newLength = resizePosition.length + deltaX;
 
   return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
 };
 const resizeCropperFromS = (state, deltaX, deltaY, newPosition) => {
-  let newTop = state.resizePosition.top;
-  let newLeft = state.resizePosition.left;
-  let newLength = state.resizePosition.length + deltaY;
+  let { resizePosition } = state;
+  let newTop = resizePosition.top;
+  let newLeft = resizePosition.left;
+  let newLength = resizePosition.length + deltaY;
 
   return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
 };
 const resizeCropperFromW = (state, deltaX, deltaY, newPosition) => {
-  let newTop = state.resizePosition.top + deltaX / 2;
-  let newLeft = state.resizePosition.left + deltaX;
-  let newLength = state.resizePosition.length - deltaX;
+  let { resizePosition } = state;
+  let newTop = resizePosition.top + deltaX / 2;
+  let newLeft = resizePosition.left + deltaX;
+  let newLength = resizePosition.length - deltaX;
 
   return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
 };
 const resizeCropperFromNE = (state, deltaX, deltaY, newPosition) => {
-  let newTop = state.resizePosition.top + deltaY;
-  let newLeft = state.resizePosition.left;
-  let newLength = state.resizePosition.length - deltaY;
+  let { resizePosition } = state;
+  let newTop = resizePosition.top + deltaY;
+  let newLeft = resizePosition.left;
+  let newLength = resizePosition.length - deltaY;
 
   return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
 };
 const resizeCropperFromSE = (state, deltaX, deltaY, newPosition) => {
-  let newTop = state.resizePosition.top;
-  let newLeft = state.resizePosition.left;
-  let newLength = state.resizePosition.length + deltaX;
+  let { resizePosition } = state;
+  let newTop = resizePosition.top;
+  let newLeft = resizePosition.left;
+  let newLength = resizePosition.length + deltaX;
 
   return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
 };
 const resizeCropperFromNW = (state, deltaX, deltaY, newPosition) => {
-  let newTop = state.resizePosition.top + deltaY;
-  let newLeft = state.resizePosition.left + deltaY;
-  let newLength = state.resizePosition.length - deltaY;
+  let { resizePosition } = state;
+  let newTop = resizePosition.top + deltaY;
+  let newLeft = resizePosition.left + deltaY;
+  let newLength = resizePosition.length - deltaY;
 
   return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
 };
 const resizeCropperFromSW = (state, deltaX, deltaY, newPosition) => {
-  let newTop = state.resizePosition.top;
-  let newLeft = state.resizePosition.left + deltaX;
-  let newLength = state.resizePosition.length - deltaX;
+  let { resizePosition } = state;
+  let newTop = resizePosition.top;
+  let newLeft = resizePosition.left + deltaX;
+  let newLength = resizePosition.length - deltaX;
 
   return setNewResizeState(state, newTop, newLeft, newLength, newPosition);
 };
@@ -350,13 +378,14 @@ const compare = (origin, target) => {
 //--------------------------
 const dragResizeBox = (state, action) => {
   let deltaX, deltaY;
+  let { refPosition, resizePosition } = state;
   let newPosition = action.payload.newPosition;
-  deltaX = newPosition.x - state.refPosition.x;
-  deltaY = newPosition.y - state.refPosition.y;
+  deltaX = newPosition.x - refPosition.x;
+  deltaY = newPosition.y - refPosition.y;
 
-  let newTop = state.resizePosition.top + deltaY;
-  let newLeft = state.resizePosition.left + deltaX;
-  let newLength = state.resizePosition.length;
+  let newTop = resizePosition.top + deltaY;
+  let newLeft = resizePosition.left + deltaX;
+  let newLength = resizePosition.length;
 
   let newBorderX = newLeft + newLength;
   let newBorderY = newTop + newLength;
@@ -370,14 +399,15 @@ const dragResizeBox = (state, action) => {
 //--------------------------
 const dragRefImgBox = (state, action) => {
   let deltaX, deltaY;
+  let { refPosition, zoomPosition } = state;
   let newPosition = action.payload.newPosition;
-  deltaX = newPosition.x - state.refPosition.x;
-  deltaY = newPosition.y - state.refPosition.y;
+  deltaX = newPosition.x - refPosition.x;
+  deltaY = newPosition.y - refPosition.y;
 
-  let newTop = state.zoomPosition.top + deltaY;
-  let newLeft = state.zoomPosition.left + deltaX;
-  let newHeight = state.zoomPosition.height;
-  let newWidth = state.zoomPosition.width;
+  let newTop = zoomPosition.top + deltaY;
+  let newLeft = zoomPosition.left + deltaX;
+  let newHeight = zoomPosition.height;
+  let newWidth = zoomPosition.width;
 
   // 返回新state
   return Object.assign({}, state, {
@@ -396,21 +426,18 @@ const dragRefImgBox = (state, action) => {
  *
  * @param {*} state
  */
-const computeRotateImg = state => {
+const computeRotateImg = (refImgData, refImgSize, rotateN) => {
   //当前用户图像
   let currentImg = new Image();
-  currentImg.src = state.refImgData;
+  currentImg.src = refImgData;
   // 旋转后的Canvas
   let rotateCanvas = document.createElement("canvas");
-  // 旋转后的图像
-  let rotateImg = new Image();
 
   //计算旋转后的画布尺寸
-  let _width = state.refImgSize.width;
-  let _height = state.refImgSize.height;
-  let _rotateN = state.rotateN;
+  let _width = refImgSize.width;
+  let _height = refImgSize.height;
   let _coordArr = [0, _width, _height, 0, 0];
-  for (let i = 0; i < _rotateN; i++) {
+  for (let i = 0; i < rotateN; i++) {
     _coordArr[0] = _coordArr[4];
     _coordArr[4] = _coordArr[3];
     _coordArr[3] = _coordArr[2];
@@ -425,55 +452,40 @@ const computeRotateImg = state => {
   rotateCanvas.width = _width;
   let ctx = rotateCanvas.getContext("2d");
   ctx.translate(_coordArr[3], _coordArr[4]);
-  ctx.rotate((_rotateN * 90 * Math.PI) / 180);
+  ctx.rotate((rotateN * 90 * Math.PI) / 180);
   ctx.drawImage(currentImg, 0, 0);
 
   // 讲Canvas转化为图像
   let rotateImgData = rotateCanvas.toDataURL("image/png");
-  rotateImg.src = rotateImgData;
 
-  return rotateImg;
+  return rotateImgData;
 };
 
-const computeCropImgData = (rotateImg, state) => {
-  // 生成一个Canvas
-  let cropCanvas = document.createElement("canvas");
-  cropCanvas.height = 96;
-  cropCanvas.width = 96;
-
-  // 计算旋转后的承载框坐标尺寸
-  let rotatePosition;
-  let _position = {
-    top: state.zoomPosition.top,
-    left: state.zoomPosition.left,
-    height: state.zoomPosition.height,
-    width: state.zoomPosition.width
-  };
-  if (state.rotateN % 2 === 0) {
-    rotatePosition = _position;
-  } else {
-    rotatePosition = computeRotatePosition(_position, state.rotateN);
+/*************
+ * 计算旋转后的承载框新坐标
+ */
+const computeRotatePosition = (loadP, rotateN) => {
+  if (rotateN % 2 === 0) {
+    return {
+      top: loadP.top,
+      left: loadP.left,
+      width: loadP.width,
+      height: loadP.height
+    };
   }
+  // 转换坐标系
+  let transX = loadP.left + loadP.width / 2;
+  let transY = loadP.top + loadP.height / 2;
+  let _w, _h;
+  // for (let i = 0; i < rotateN; i++) {
+  // 调换长和宽数值
+  _w = loadP.height;
+  _h = loadP.width;
+  loadP.width = _w;
+  loadP.height = _h;
+  // }
 
-  // 计算Canvas所需参数
-  let multiForImgSize, multiForBoxSize;
-  if (state.refImgSize.height >= state.refImgSize.width) {
-    multiForImgSize = state.refImgSize.height / 310;
-    multiForBoxSize = state.zoomPosition.height / 310;
-  } else {
-    multiForImgSize = state.refImgSize.width / 310;
-    multiForBoxSize = state.zoomPosition.width / 310;
-  }
-  let sx = (state.resizePosition.left - rotatePosition.left) * multiForImgSize;
-  let sy = (state.resizePosition.top - rotatePosition.top) * multiForImgSize;
-  let sLength =
-    (state.resizePosition.length * multiForImgSize) / multiForBoxSize;
-
-  // 绘制Canvas
-  cropCanvas
-    .getContext("2d")
-    .drawImage(rotateImg, sx, sy, sLength, sLength, 0, 0, 96, 96);
-  // Canvas转成图片信息
-  let cropImgData = cropCanvas.toDataURL("image/png");
-  return cropImgData;
+  loadP.left = transX - loadP.width / 2;
+  loadP.top = transY - loadP.height / 2;
+  return loadP;
 };

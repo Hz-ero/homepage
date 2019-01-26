@@ -1,16 +1,23 @@
 import { createReducer } from "redux-action-tools";
+const _string = require("lodash/string");
 import * as Types from "../actions/actionTypes";
 
 const initState = {
   name: "",
+  shortName: "",
   address: "",
   icon: "",
   rightDrawerSignel: false
 };
 
 const inputSiteName = (state, action) => {
+  let siteName = action.payload.name;
+  let cutWords = _string.truncate(siteName, { length: 2, omission: "" });
+  let shortName = _string.upperCase(cutWords);
+
   return Object.assign({}, state, {
-    name: action.payload.name
+    name: siteName,
+    shortName: shortName
   });
 };
 const inputSiteAddress = (state, action) => {

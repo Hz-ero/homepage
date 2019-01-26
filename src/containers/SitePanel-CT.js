@@ -4,10 +4,10 @@ import * as Actions from "../actions";
 
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
-  if (!immu_state.sites.size) {
+  if (!immu_state.sites.items.size) {
     return { siteArray: [] };
   } else {
-    return { siteArray: immu_state.sites.toJS() };
+    return { siteArray: immu_state.sites.items.toJS() };
   }
 };
 
@@ -16,6 +16,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(Actions.switchRightDrawer(false));
     dispatch(Actions.resetColorPicker());
     dispatch(Actions.switchImageCrop(false));
+  },
+  wantShowSiteAction: () => {
+    dispatch(Actions.setSiteFlag(true));
   }
 });
 

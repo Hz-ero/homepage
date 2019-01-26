@@ -34,6 +34,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantSetRefImgSize: refImgSize => {
     dispatch(Actions.setRefImgSize(refImgSize));
+    dispatch(Actions.rotateImg(0));
     dispatch(Actions.cropImage());
   }
 });
