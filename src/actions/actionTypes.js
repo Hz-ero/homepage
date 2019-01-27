@@ -1,4 +1,3 @@
-export const ADD_SITE = "ADD_SITE";
 export const SET_SITE_FLAG = "SET_SITE_FLAG";
 export const DELETE_SITE = "DELETE_SITE";
 export const SHOW_RIGHT_DRAWER = "SHOW_RIGHT_DRAWER";
