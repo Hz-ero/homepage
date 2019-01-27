@@ -52,6 +52,7 @@ const RightSider_CP = props => {
       iconColor: iconColor,
       radio: radioSelected
     };
+    wantCloseRightDrawer();
     wantSubmitSiteForm(newSiteInfo);
   };
   const handleResetImgCrop = e => {

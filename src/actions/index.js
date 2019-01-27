@@ -3,6 +3,13 @@ import * as Types from "./actionTypes.js";
 
 let nextSiteId = 0;
 
+export const deleteSiteItem = createAction(
+  Types.DELETE_SITE_ITEM,
+  deleteId => ({
+    deleteId
+  })
+);
+
 // =============color picker===============
 export const selectRadio = createAction(Types.SELECT_RADIO, index => ({
   radioSelected: index

@@ -279,11 +279,12 @@
 }
 .iconBox:hover .editSiteBox {
   visibility: visible;
+  border-radius: 6px;
 }
 .editSiteBox {
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   position: absolute;
   top: 0;
   left: 0;
@@ -294,9 +295,8 @@
 }
 
 .editSiteBtn {
-  height: 64px;
-  width: 64px;
-  margin: auto;
+  height: 56px;
+  width: 56px;
 }
 .deleteBox {
   cursor: default;

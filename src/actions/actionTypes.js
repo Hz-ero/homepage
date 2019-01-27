@@ -1,6 +1,6 @@
 export const ADD_SITE = "ADD_SITE";
 export const SET_SITE_FLAG = "SET_SITE_FLAG";
-export const DELETE_SITE = "DELETE_SITE";
+export const DELETE_SITE_ITEM = "DELETE_SITE_ITEM";
 export const SHOW_RIGHT_DRAWER = "SHOW_RIGHT_DRAWER";
 export const CLOSE_RIGHT_DRAWER = "CLOSE_RIGHT_DRAWER";
 export const PREVIEW_ICON = "PREVIEW_ICON";

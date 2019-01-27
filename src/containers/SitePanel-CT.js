@@ -7,7 +7,10 @@ const mapStateToProps = (state, ownProps) => {
   if (!immu_state.sites.items.size) {
     return { siteArray: [] };
   } else {
-    return { siteArray: immu_state.sites.items.toJS() };
+    return {
+      siteFlag: immu_state.sites.siteFlag,
+      siteArray: immu_state.sites.items.toJS()
+    };
   }
 };
 
@@ -19,6 +22,12 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantShowSiteAction: () => {
     dispatch(Actions.setSiteFlag(true));
+  },
+  wantCloseSiteAction: () => {
+    dispatch(Actions.setSiteFlag(false));
+  },
+  wantDeleteSite: index => {
+    dispatch(Actions.deleteSiteItem(index));
   }
 });
 
