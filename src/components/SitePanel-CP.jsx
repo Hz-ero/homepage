@@ -1,10 +1,16 @@
 import React from "react";
-import { ClearRounded, Create } from "@material-ui/icons";
-import { Button } from "@material-ui/core";
+// import { ClearRounded, Create } from "@material-ui/icons";
+import { Fab } from "@material-ui/core";
 import Style from "./style.css";
 
 const SiteItem = props => {
-  const { siteInfo, wantShowSiteAction } = props;
+  const {
+    siteFlag,
+    siteInfo,
+    index,
+    wantShowSiteAction,
+    wantDeleteSite
+  } = props;
 
   const handleClickOpenSite = e => {
     e.preventDefault();
@@ -16,6 +22,12 @@ const SiteItem = props => {
     wantShowSiteAction();
     console.log("youjiandanji");
     return false;
+  };
+
+  const handleDeleteSite = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    wantDeleteSite(index);
   };
 
   return (
@@ -50,14 +62,21 @@ const SiteItem = props => {
           <img src={siteInfo.iconData} className={Style.iconImg} />
         </div>
         {/* ------修改按钮------- */}
-        <div className={Style.editSiteBox}>
-          <Button variant="outlined">
-            <Create size="large" />
-          </Button>
+        <div
+          style={{ display: siteFlag === false ? "none" : "flex" }}
+          className={Style.editSiteBox}
+        >
+          <Fab variant="outlined" className={Style.editSiteBtn}>
+            {/* <Create fontSize="large" /> */}
+          </Fab>
         </div>
         {/* ------删除按钮------- */}
-        <div className={Style.deleteBox}>
-          <ClearRounded />
+        <div
+          style={{ display: siteFlag === false ? "none" : "block" }}
+          className={Style.deleteBox}
+          onClick={e => handleDeleteSite(e)}
+        >
+          {/* <ClearRounded /> */}
         </div>
       </div>
       <div className={Style.siteName}>{siteInfo.name}</div>
@@ -66,20 +85,30 @@ const SiteItem = props => {
 };
 
 const SitePanel_CP = props => {
-  const { siteArray, wantCloseRightDrawer, wantShowSiteAction } = props;
-  const handleCloseRightDrawer = e => {
+  const {
+    siteFlag,
+    siteArray,
+    wantCloseRightDrawer,
+    wantShowSiteAction,
+    wantCloseSiteAction,
+    wantDeleteSite
+  } = props;
+  const handleClickScreen = e => {
     e.preventDefault();
     wantCloseRightDrawer();
+    wantCloseSiteAction();
   };
   return (
-    <div onClick={e => handleCloseRightDrawer(e)} className={Style.fullBox}>
+    <div onClick={e => handleClickScreen(e)} className={Style.fullBox}>
       <div className={Style.sitesPanel}>
         {siteArray.map(item => (
           <SiteItem
             key={item.id}
             index={item.id}
             siteInfo={item.siteInfo}
+            siteFlag={siteFlag}
             wantShowSiteAction={wantShowSiteAction}
+            wantDeleteSite={wantDeleteSite}
           />
         ))}
       </div>

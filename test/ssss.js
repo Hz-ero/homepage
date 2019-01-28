@@ -45,3 +45,13 @@ m;
 let url = "http://guancha.cn";
 let prot = url.substr(0, 7);
 prot;
+let deleteId = 2;
+let aa = [{ id: 0 }, { id: 1 }, { id: 2 }];
+let findIndex = -1;
+do {
+  findIndex += 1;
+  console.log(aa[findIndex]);
+} while (aa[findIndex].id !== deleteId);
+aa.splice(findIndex, 1);
+findIndex;
+aa;
