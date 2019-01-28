@@ -41,3 +41,7 @@ if (compare(newState.resizePosition, initState.resizePosition)) {
 let m = -9 % 4;
 m = m + 4;
 m;
+
+let url = "http://guancha.cn";
+let prot = url.substr(0, 7);
+prot;

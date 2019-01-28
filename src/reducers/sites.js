@@ -10,6 +10,15 @@ const initState = {
 const submitSiteForm = (state, action) => {
   let siteItems = List(state.items);
 
+  //check url, if not completed
+  let inputUrl = action.payload.siteInfo.address;
+  let urlProt4http = inputUrl.substr(0, 7);
+  let urlPort4https = inputUrl.substr(0, 8);
+  if (urlProt4http === "http://" || urlPort4https === "https://") {
+  } else {
+    action.payload.siteInfo.address = "http://" + inputUrl;
+  }
+
   let newSiteItems = siteItems.push({
     id: action.payload.id,
     siteInfo: action.payload.siteInfo

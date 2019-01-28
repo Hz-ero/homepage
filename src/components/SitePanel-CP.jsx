@@ -8,7 +8,7 @@ const SiteItem = props => {
 
   const handleClickOpenSite = e => {
     e.preventDefault();
-    window.open("http://www.guancha.cn/", "_blank");
+    window.open(siteInfo.address, "_blank");
   };
 
   const handleContextMenu = e => {
