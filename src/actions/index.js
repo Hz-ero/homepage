@@ -35,6 +35,13 @@ export const previewIcon = createAction(Types.PREVIEW_ICON, iconAdr => ({
 }));
 
 // =================Right Drawer===================
+export const changeSiteInfo = createAction(
+  Types.CHANGE_SITE_INFO,
+  (siteInfo, editIndex) => ({
+    siteInfo,
+    editIndex
+  })
+);
 export const inputSiteName = createAction(Types.INPUT_SITE_NAME, name => ({
   name
 }));
@@ -50,6 +57,9 @@ export const inputIconReference = createAction(
     icon
   })
 );
+export const editInDrawer = createAction(Types.EDIT_IN_DRAWER, siteInfo => ({
+  siteInfo
+}));
 export const inputAdrError = createAction(Types.INPUT_ADR_ERROR, adrError => ({
   adrError
 }));
@@ -61,13 +71,17 @@ export const inputFaviconAdr = createAction(
 );
 export const switchRightDrawer = createAction(
   Types.SWITCH_RIGHT_DRAWER,
-  rightDrawerSignel => ({
-    rightDrawerSignel
+  drawerFlag => ({
+    drawerFlag
   })
 );
 
 export const setSiteFlag = createAction(Types.SET_SITE_FLAG, siteFlag => ({
   siteFlag
+}));
+
+export const setEditIndex = createAction(Types.SET_EDIT_INDEX, editIndex => ({
+  editIndex
 }));
 
 export const submitSiteForm = createAction(

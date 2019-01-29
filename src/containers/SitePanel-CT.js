@@ -9,7 +9,8 @@ const mapStateToProps = (state, ownProps) => {
   } else {
     return {
       siteFlag: immu_state.sites.siteFlag,
-      siteArray: immu_state.sites.items.toJS()
+      siteArray: immu_state.sites.items.toJS(),
+      drawerFlag: immu_state.siteForm.drawerFlag
     };
   }
 };
@@ -28,6 +29,12 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantDeleteSite: index => {
     dispatch(Actions.deleteSiteItem(index));
+  },
+  wantSetEditIndex: editIndex => {
+    dispatch(Actions.setEditIndex(editIndex));
+  },
+  wantEditInDrawer: siteInfo => {
+    dispatch(Actions.editInDrawer(siteInfo));
   }
 });
 

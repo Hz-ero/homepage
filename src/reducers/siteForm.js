@@ -7,7 +7,19 @@ const initState = {
   shortName: "",
   address: "",
   icon: "",
-  rightDrawerSignel: false
+  drawerFlag: false
+};
+
+const editInDrawer = (state, action) => {
+  console.log(action);
+
+  return Object.assign({}, state, {
+    name: action.payload.siteInfo.name,
+    shortName: action.payload.siteInfo.shortName,
+    address: action.payload.siteInfo.address,
+    icon: action.payload.siteInfo.iconData,
+    drawerFlag: true
+  });
 };
 
 const inputSiteName = (state, action) => {
@@ -41,10 +53,10 @@ const inputFaviconAdr = (state, action) => {
   });
 };
 const switchRightDrawer = (state, action) => {
-  const signal = action.payload.rightDrawerSignel;
+  const signal = action.payload.drawerFlag;
   if (signal === true) {
     return Object.assign({}, state, {
-      rightDrawerSignel: signal
+      drawerFlag: signal
     });
   } else {
     return initState;
@@ -58,6 +70,7 @@ const siteForm = createReducer()
   .when(Types.INPUT_ADR_ERROR, inputAdrError)
   .when(Types.INPUT_FAVICON_ADR, inputFaviconAdr)
   .when(Types.SWITCH_RIGHT_DRAWER, switchRightDrawer)
+  .when(Types.EDIT_IN_DRAWER, editInDrawer)
   .build(initState);
 
 export default siteForm;

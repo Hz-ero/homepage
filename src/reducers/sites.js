@@ -3,6 +3,7 @@ import { createReducer } from "redux-action-tools";
 import * as Types from "../actions/actionTypes";
 
 const initState = {
+  editIndex: -1,
   siteFlag: false,
   items: []
 };
@@ -50,10 +51,26 @@ const deleteSiteItem = (state, action) => {
   });
 };
 
+const setEditIndex = (state, action) => {
+  return Object.assign({}, state, {
+    editIndex: action.payload.editIndex
+  });
+};
+
+const changeSiteInfo = (state, action) => {
+  let siteItems = state.items.toArray();
+  siteItems[action.payload.editIndex].siteInfo = action.payload.siteInfo;
+
+  return Object.assign({}, state, {
+    items: List(siteItems)
+  });
+};
 const sites = createReducer()
   .when(Types.SUBMIT_SITE_FORM, submitSiteForm)
   .when(Types.SET_SITE_FLAG, setSiteFlag)
   .when(Types.DELETE_SITE_ITEM, deleteSiteItem)
+  .when(Types.CHANGE_SITE_INFO, changeSiteInfo)
+  .when(Types.SET_EDIT_INDEX, setEditIndex)
   .build(initState);
 
 export default sites;

@@ -8,7 +8,8 @@ const mapStateToProps = (state, ownProps) => {
     siteForm: immu_state.siteForm,
     iconColor: immu_state.color.colorSelected,
     radioSelected: immu_state.color.radioSelected,
-    cropState: immu_state.cropModel
+    cropState: immu_state.cropModel,
+    editIndex: immu_state.sites.editIndex
   };
 };
 
@@ -38,6 +39,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   wantResetImgCrop: () => {
     dispatch(Actions.resetImgCrop());
+  },
+  wantChangeSiteInfo: (siteInfo, editIndex) => {
+    dispatch(Actions.changeSiteInfo(siteInfo, editIndex));
   }
 });
 

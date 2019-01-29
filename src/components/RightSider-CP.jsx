@@ -13,6 +13,7 @@ import ColorRadios_CT from "../containers/ColorRadios-CT";
 const RightSider_CP = props => {
   const {
     siteForm,
+    editIndex,
     iconColor,
     radioSelected,
     cropState,
@@ -23,7 +24,8 @@ const RightSider_CP = props => {
     wantSetImgData,
     wantOpenImageCrop,
     wantCloseRightDrawer,
-    wantResetImgCrop
+    wantResetImgCrop,
+    wantChangeSiteInfo
   } = props;
 
   const handleCloseColorPicker = e => {
@@ -52,8 +54,14 @@ const RightSider_CP = props => {
       iconColor: iconColor,
       radio: radioSelected
     };
+    console.log("hihii:", siteForm.drawerFlag);
+
+    if (editIndex === -1) {
+      wantSubmitSiteForm(newSiteInfo);
+    } else {
+      wantChangeSiteInfo(newSiteInfo, siteForm.drawerFlag);
+    }
     wantCloseRightDrawer();
-    wantSubmitSiteForm(newSiteInfo);
   };
   const handleResetImgCrop = e => {
     e.preventDefault();
@@ -86,7 +94,7 @@ const RightSider_CP = props => {
     <div onClick={e => handleCloseColorPicker(e)}>
       <Slide
         direction="left"
-        in={siteForm.rightDrawerSignel}
+        in={siteForm.drawerFlag}
         mountOnEnter
         unmountOnExit
       >

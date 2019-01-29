@@ -9,7 +9,9 @@ const SiteItem = props => {
     siteInfo,
     index,
     wantShowSiteAction,
-    wantDeleteSite
+    wantDeleteSite,
+    wantSetEditIndex,
+    wantEditInDrawer
   } = props;
 
   const handleClickOpenSite = e => {
@@ -28,6 +30,13 @@ const SiteItem = props => {
     e.preventDefault();
     e.stopPropagation();
     wantDeleteSite(index);
+  };
+
+  const handleEditSite = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    wantSetEditIndex(index);
+    wantEditInDrawer(siteInfo);
   };
 
   return (
@@ -66,7 +75,11 @@ const SiteItem = props => {
           style={{ display: siteFlag === false ? "none" : "flex" }}
           className={Style.editSiteBox}
         >
-          <Fab variant="outlined" className={Style.editSiteBtn}>
+          <Fab
+            variant="outlined"
+            className={Style.editSiteBtn}
+            onClick={e => handleEditSite(e)}
+          >
             {/* <Create fontSize="large" /> */}
           </Fab>
         </div>
@@ -86,17 +99,25 @@ const SiteItem = props => {
 
 const SitePanel_CP = props => {
   const {
+    drawerFlag,
     siteFlag,
     siteArray,
     wantCloseRightDrawer,
     wantShowSiteAction,
     wantCloseSiteAction,
-    wantDeleteSite
+    wantDeleteSite,
+    wantSetEditIndex,
+    wantEditInDrawer
   } = props;
   const handleClickScreen = e => {
     e.preventDefault();
-    wantCloseRightDrawer();
-    wantCloseSiteAction();
+
+    if (drawerFlag === true) {
+      wantCloseRightDrawer();
+    } else {
+      wantCloseSiteAction();
+      wantSetEditIndex(-1);
+    }
   };
   return (
     <div onClick={e => handleClickScreen(e)} className={Style.fullBox}>
@@ -109,6 +130,8 @@ const SitePanel_CP = props => {
             siteFlag={siteFlag}
             wantShowSiteAction={wantShowSiteAction}
             wantDeleteSite={wantDeleteSite}
+            wantSetEditIndex={wantSetEditIndex}
+            wantEditInDrawer={wantEditInDrawer}
           />
         ))}
       </div>
