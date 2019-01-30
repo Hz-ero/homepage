@@ -1,5 +1,7 @@
 const webpack = require("webpack");
 var OpenBrowserPlugin = require("open-browser-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 const path = require("path");
 
 module.exports = {
@@ -46,6 +48,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin({
       // Options...
     }),
-    new OpenBrowserPlugin({ url: "http://localhost:9000" })
+    new OpenBrowserPlugin({ url: "http://localhost:9000" }),
+    new BundleAnalyzerPlugin()
   ]
 };
