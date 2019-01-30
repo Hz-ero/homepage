@@ -76,11 +76,6 @@ const RadioItem = props => {
     clickSelectRadio(radioIndex);
 
     if (radioIndex === 11) {
-      {
-        /* TODO: delete leater */
-      }
-      console.log(props);
-
       e.stopPropagation();
       props.wantOpenColorPicker();
       props.wantSetOuterNode(props.outerNode);

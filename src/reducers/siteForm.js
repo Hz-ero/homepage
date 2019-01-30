@@ -11,8 +11,6 @@ const initState = {
 };
 
 const editInDrawer = (state, action) => {
-  console.log(action);
-
   return Object.assign({}, state, {
     name: action.payload.siteInfo.name,
     shortName: action.payload.siteInfo.shortName,

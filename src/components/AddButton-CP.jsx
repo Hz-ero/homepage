@@ -13,7 +13,7 @@ const AddButton = props => {
 
   return (
     <div className={Style.addButton}>
-      <div className={siteArray.length < 16 ? Style.show : Style.hidden}>
+      <div className={siteArray.length < 10 ? Style.show : Style.hidden}>
         <Fab
           size="medium"
           color="secondary"

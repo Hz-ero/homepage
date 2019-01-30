@@ -40,10 +40,10 @@ const RightSider_CP = props => {
     wantInputSiteAddress(input.target.value);
   };
 
-  const handleCancel = e => {
-    e.preventDefault();
-    wantCloseRightDrawer();
-  };
+  // const handleCancel = e => {
+  //   e.preventDefault();
+  //   wantCloseRightDrawer();
+  // };
   const handleSubmit = e => {
     e.preventDefault();
     const newSiteInfo = {
@@ -54,12 +54,11 @@ const RightSider_CP = props => {
       iconColor: iconColor,
       radio: radioSelected
     };
-    console.log("hihii:", siteForm.drawerFlag);
 
     if (editIndex === -1) {
       wantSubmitSiteForm(newSiteInfo);
     } else {
-      wantChangeSiteInfo(newSiteInfo, siteForm.drawerFlag);
+      wantChangeSiteInfo(newSiteInfo, editIndex);
     }
     wantCloseRightDrawer();
   };
@@ -200,24 +199,24 @@ const RightSider_CP = props => {
             <ColorRadios_CT outerNode="rightSider" />
             {/* ------按钮------- */}
             <div className={Style.formSection}>
-              <div className={Style.actionButtons}>
-                <Button
+              {/* <div className={Style.actionButtons}> */}
+              {/* <Button
                   variant="contained"
                   color="default"
                   onClick={e => handleCancel(e)}
                   className={Style.actionButton}
                 >
                   取消
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={e => handleSubmit(e)}
-                  className={Style.actionButton}
-                >
-                  确认
-                </Button>
-              </div>
+                </Button> */}
+              {/* </div> */}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={e => handleSubmit(e)}
+                className={Style.actionButton}
+              >
+                确认
+              </Button>
             </div>
           </form>
         </div>

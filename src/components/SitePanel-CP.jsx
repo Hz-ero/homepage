@@ -7,10 +7,12 @@ const SiteItem = props => {
   const {
     siteFlag,
     siteInfo,
+    drawerFlag,
     index,
     wantShowSiteAction,
     wantDeleteSite,
     wantSetEditIndex,
+    wantCloseRightDrawer,
     wantEditInDrawer
   } = props;
 
@@ -22,14 +24,18 @@ const SiteItem = props => {
   const handleContextMenu = e => {
     e.preventDefault();
     wantShowSiteAction();
-    console.log("youjiandanji");
     return false;
   };
 
   const handleDeleteSite = e => {
     e.preventDefault();
     e.stopPropagation();
-    wantDeleteSite(index);
+
+    if (drawerFlag === true) {
+      wantCloseRightDrawer();
+    } else {
+      wantDeleteSite(index);
+    }
   };
 
   const handleEditSite = e => {
@@ -128,8 +134,10 @@ const SitePanel_CP = props => {
             index={item.id}
             siteInfo={item.siteInfo}
             siteFlag={siteFlag}
-            wantShowSiteAction={wantShowSiteAction}
+            drawerFlag={drawerFlag}
             wantDeleteSite={wantDeleteSite}
+            wantShowSiteAction={wantShowSiteAction}
+            wantCloseRightDrawer={wantCloseRightDrawer}
             wantSetEditIndex={wantSetEditIndex}
             wantEditInDrawer={wantEditInDrawer}
           />

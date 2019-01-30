@@ -5,12 +5,18 @@ import * as Actions from "../actions";
 const mapStateToProps = (state, ownProps) => {
   const immu_state = state.toObject();
   if (!immu_state.sites.items.size) {
-    return { siteArray: [] };
+    return {
+      siteFlag: immu_state.sites.siteFlag,
+      drawerFlag: immu_state.siteForm.drawerFlag,
+
+      siteArray: []
+    };
   } else {
     return {
       siteFlag: immu_state.sites.siteFlag,
-      siteArray: immu_state.sites.items.toJS(),
-      drawerFlag: immu_state.siteForm.drawerFlag
+      drawerFlag: immu_state.siteForm.drawerFlag,
+
+      siteArray: immu_state.sites.items.toJS()
     };
   }
 };
