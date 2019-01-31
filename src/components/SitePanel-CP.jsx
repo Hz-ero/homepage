@@ -1,5 +1,5 @@
 import React from "react";
-// import { ClearRounded, Create } from "@material-ui/icons";
+import { ClearRounded, Create } from "@material-ui/icons";
 import { Fab } from "@material-ui/core";
 import Style from "./style.css";
 
@@ -86,7 +86,7 @@ const SiteItem = props => {
             className={Style.editSiteBtn}
             onClick={e => handleEditSite(e)}
           >
-            {/* <Create fontSize="large" /> */}
+            <Create fontSize="large" />
           </Fab>
         </div>
         {/* ------删除按钮------- */}
@@ -95,7 +95,7 @@ const SiteItem = props => {
           className={Style.deleteBox}
           onClick={e => handleDeleteSite(e)}
         >
-          {/* <ClearRounded /> */}
+          <ClearRounded />
         </div>
       </div>
       <div className={Style.siteName}>{siteInfo.name}</div>

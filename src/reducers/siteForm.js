@@ -1,5 +1,5 @@
 import { createReducer } from "redux-action-tools";
-const _string = require("lodash/string");
+const _ = require("lodash");
 import * as Types from "../actions/actionTypes";
 
 const initState = {
@@ -22,8 +22,8 @@ const editInDrawer = (state, action) => {
 
 const inputSiteName = (state, action) => {
   let siteName = action.payload.name;
-  let cutWords = _string.truncate(siteName, { length: 2, omission: "" });
-  let shortName = _string.upperCase(cutWords);
+  let cutWords = _.truncate(siteName, { length: 2, omission: "" });
+  let shortName = _.upperCase(cutWords);
 
   return Object.assign({}, state, {
     name: siteName,

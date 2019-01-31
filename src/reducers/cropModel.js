@@ -1,5 +1,5 @@
 import { createReducer } from "redux-action-tools";
-const _object = require("lodash/object");
+const _ = require("lodash");
 import * as Types from "../actions/actionTypes";
 
 const initState = {
@@ -69,7 +69,7 @@ const setImgData = (state, action) => {
   });
 };
 const resetCropBox = (state, action) => {
-  let newState = _object.omit(initState, [
+  let newState = _.omit(initState, [
     "refImgData",
     "cropImgData",
     "imageCropSignal",
@@ -83,7 +83,7 @@ const resetImgCrop = () => {
   return initState;
 };
 const finishCrop = (state, action) => {
-  let newState = _object.omit(initState, [
+  let newState = _.omit(initState, [
     "zoomPosition",
     "refImgData",
     "cropImgData",

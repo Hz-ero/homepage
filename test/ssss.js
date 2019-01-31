@@ -1,4 +1,4 @@
-const _object = require("lodash/object");
+const _ = require("lodash");
 const initState = {
   resizePosition: {
     top: 0,

@@ -1,13 +1,13 @@
 import React from "react";
 import Style from "./style.css";
 import { Button } from "@material-ui/core";
-// import {
-//   RotateLeft,
-//   RotateRight,
-//   ZoomIn,
-//   ZoomOut,
-//   Cached
-// } from "@material-ui/icons";
+import {
+  RotateLeft,
+  RotateRight,
+  ZoomIn,
+  ZoomOut,
+  Cached
+} from "@material-ui/icons";
 import ColorRadios_CT from "../containers/ColorRadios-CT";
 import CropArea_CT from "../containers/CropArea-CT";
 
@@ -73,7 +73,7 @@ const ImageCrop_CP = props => {
               className={Style.leftButton}
               onClick={(e, number) => handleRotateImg(e, -1)}
             >
-              {/* <RotateLeft /> */}
+              <RotateLeft />
             </Button>
             <Button
               size="small"
@@ -81,7 +81,7 @@ const ImageCrop_CP = props => {
               className={Style.rightButton}
               onClick={(e, number) => handleRotateImg(e, 1)}
             >
-              {/* <RotateRight /> */}
+              <RotateRight />
             </Button>
           </div>
           <div>
@@ -91,7 +91,7 @@ const ImageCrop_CP = props => {
               className={Style.leftButton}
               onClick={e => handleZoomInImg(e)}
             >
-              {/* <ZoomIn /> */}
+              <ZoomIn />
             </Button>
             <Button
               size="small"
@@ -99,7 +99,7 @@ const ImageCrop_CP = props => {
               className={Style.rightButton}
               onClick={e => handleZoomOutImg(e)}
             >
-              {/* <ZoomOut /> */}
+              <ZoomOut />
             </Button>
           </div>
           <Button
@@ -108,7 +108,7 @@ const ImageCrop_CP = props => {
             className={Style.singleButton}
             onClick={e => handleResetCropBox(e)}
           >
-            {/* <Cached /> */}
+            <Cached />
           </Button>
         </div>
         <Button

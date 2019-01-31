@@ -6,6 +6,7 @@
   "scripts": {
     "server": "node server/index.js",
     "dev": "webpack-dev-server --mode=development --progress --config webpack.config.js",
+    "dll": "webpack --config webpack.dll.config.js",
     "build": "NODE_ENV=production webpack",
     "test": "ava"
   },
@@ -31,7 +32,7 @@
     "babel-polyfill": "^6.26.0",
     "css-loader": "^2.0.1",
     "immutable": "^4.0.0-rc.12",
-    "loadsh": "0.0.3",
+    "lodash": "^4.17.11",
     "node-fetch": "^2.3.0",
     "open-browser-webpack-plugin": "0.0.5",
     "react": "^16.6.3",

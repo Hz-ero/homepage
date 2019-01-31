@@ -50,7 +50,7 @@ module.exports = {
       // Options...
     }),
     new OpenBrowserPlugin({ url: "http://localhost:9000" }),
-    // new BundleAnalyzerPlugin(),
+    new BundleAnalyzerPlugin(),
     new webpack.DllReferencePlugin({
       context: __dirname,
       manifest: require("./build/bundle.manifest.json")

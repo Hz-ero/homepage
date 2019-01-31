@@ -1,7 +1,7 @@
 import React from "react";
 import Style from "./style.css";
 import { Fab } from "@material-ui/core";
-// import AddIcon from '@material-ui/icons/Add'
+import AddIcon from "@material-ui/icons/Add";
 
 const AddButton = props => {
   const { siteArray, wantShowRightDrawer } = props;
@@ -20,7 +20,7 @@ const AddButton = props => {
           aria-label="Add"
           onClick={handleShowSidePanel}
         >
-          {/* <AddIcon /> */}
+          <AddIcon />
         </Fab>
       </div>
     </div>

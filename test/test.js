@@ -1,16 +1,16 @@
 import test from "ava";
-var _string = require("lodash/string");
+var _ = require("lodash");
 
 const adrToName = adr => {
   let result = adr;
   if (adr === "") {
     return false;
   }
-  result = _string.replace(result, "http://", "");
-  result = _string.replace(result, "https://", "");
-  result = _string.replace(result, "www.", "");
-  result = _string.replace(result, ".com", "");
-  result = _string.replace(result, ".cn", "");
+  result = _.replace(result, "http://", "");
+  result = _.replace(result, "https://", "");
+  result = _.replace(result, "www.", "");
+  result = _.replace(result, ".com", "");
+  result = _.replace(result, ".cn", "");
   return result;
 };
 
